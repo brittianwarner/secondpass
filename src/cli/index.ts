@@ -17,6 +17,9 @@
  *   export   write a stored run to Markdown
  */
 
+// The published version, from the one file that defines it. Hardcoding it here
+// meant `--version` kept reporting whatever the last release was.
+import { version } from "../../package.json" with { type: "json" };
 import { runInit } from "./commands/init.js";
 import { runDoctor } from "./commands/doctor.js";
 import { runScanCommand } from "./commands/scan.js";
@@ -121,32 +124,47 @@ Getting started
 export async function main(argv: readonly string[]): Promise<number> {
   const args = parseArgv(argv);
 
+  // Before the help branch: `secondpass --version` parses to no command at
+  // all, so a version check placed after it can never run.
+  if (flagBool(args, "version")) {
+    console.log(`secondpass ${version}`);
+    return 0;
+  }
   if (args.command === undefined || args.command === "help") {
     console.log(HELP);
     return 0;
   }
-  if (flagBool(args, "version")) {
-    console.log("secondpass 0.1.0");
-    return 0;
-  }
 
-  switch (args.command) {
-    case "init":
-      return runInit(args);
-    case "doctor":
-      return runDoctor(args);
-    case "scan":
-      return runScanCommand(args);
-    case "list":
-      return runList(args);
-    case "report":
-      return runReport(args);
-    case "export":
-      return runExport(args);
-    default:
-      console.error(`unknown command: ${args.command}\n`);
-      console.error(HELP);
-      return 64; // EX_USAGE
+  // Anything a command throws lands here. Without this boundary a malformed
+  // config file — or any other unhandled error — printed a Bun stack trace and
+  // exited 1, which is the code for "confirmed findings": CI could not tell a
+  // broken config from a critical vulnerability. Exit 2 says what is true, that
+  // the run never got far enough to make a claim.
+  try {
+    switch (args.command) {
+      case "init":
+        return await runInit(args);
+      case "doctor":
+        return await runDoctor(args);
+      case "scan":
+        return await runScanCommand(args);
+      case "list":
+        return await runList(args);
+      case "report":
+        return await runReport(args);
+      case "export":
+        return await runExport(args);
+      default:
+        console.error(`unknown command: ${args.command}\n`);
+        console.error(HELP);
+        return 64; // EX_USAGE
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("");
+    console.error(`  secondpass ${args.command}: ${message}`);
+    console.error("");
+    return 2;
   }
 }
 

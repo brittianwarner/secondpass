@@ -12,7 +12,7 @@
  *   2  the scan could not run, or could not run far enough to make a claim
  */
 
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
 import { runScan, type RunEvent } from "../../pipeline.js";
@@ -51,7 +51,36 @@ Options
 
 const SEVERITY_LADDER: readonly Severity[] = ["low", "medium", "high", "critical"];
 
-/** Meets or exceeds the threshold. `any` catches everything, `never` nothing. */
+/** Every value `--fail-on` accepts. Anything else is a typo, not a threshold. */
+export const FAIL_ON_VALUES: readonly string[] = [...SEVERITY_LADDER, "any", "never"];
+
+/**
+ * Accept a `--fail-on` value or say why not.
+ *
+ * Unknown values must be rejected rather than defaulted: a threshold nobody
+ * recognizes used to match nothing, so `--fail-on hgih` in a CI config
+ * disabled the gate and every run passed.
+ */
+export function resolveThreshold(
+  input: string | undefined,
+): { ok: true; threshold: string } | { ok: false; error: string } {
+  const threshold = input ?? "high";
+  if (!FAIL_ON_VALUES.includes(threshold)) {
+    return {
+      ok: false,
+      error: `Unknown --fail-on value: ${threshold}. Expected one of: ${FAIL_ON_VALUES.join(", ")}.`,
+    };
+  }
+  return { ok: true, threshold };
+}
+
+/**
+ * Meets or exceeds the threshold. `any` catches everything, `never` nothing.
+ *
+ * Only ever called with a threshold that `FAIL_ON_VALUES` already accepted —
+ * an unrecognized one used to fall through to `false`, which turned a typo in
+ * a CI config (`--fail-on hgih`) into a scanner that passes everything.
+ */
 function failsThreshold(severity: Severity, threshold: string): boolean {
   if (threshold === "never") return false;
   if (threshold === "any") return true;
@@ -80,6 +109,27 @@ export async function runScanCommand(args: ParsedArgs): Promise<number> {
   }
   const { project } = selected.selected;
 
+  // Check the target before the walk reaches it. Left to the file walker, a
+  // typo'd path surfaces as an unhandled ENOENT stack trace on exit 1 — the
+  // same code as "confirmed findings", so CI cannot tell a misspelled
+  // directory from a critical vulnerability.
+  const rootStat = ((): { ok: true } | { ok: false; error: string } => {
+    try {
+      if (!statSync(project.root).isDirectory()) {
+        return { ok: false, error: `not a directory: ${project.root}` };
+      }
+      return { ok: true };
+    } catch {
+      return { ok: false, error: `no such directory: ${project.root}` };
+    }
+  })();
+  if (!rootStat.ok) {
+    console.error("");
+    console.error(`  ${paint("red", "Cannot scan.")} ${rootStat.error}`);
+    console.error("");
+    return 2;
+  }
+
   const adjudicate = !flagBool(args, "scan-only");
   if (adjudicate && !ctx.credential.ok) {
     console.error("");
@@ -90,7 +140,14 @@ export async function runScanCommand(args: ParsedArgs): Promise<number> {
     return 2;
   }
 
-  const threshold = flagString(args, "fail-on") ?? "high";
+  const resolvedThreshold = resolveThreshold(flagString(args, "fail-on"));
+  if (!resolvedThreshold.ok) {
+    console.error("");
+    console.error(`  ${paint("red", resolvedThreshold.error)}`);
+    console.error("");
+    return 2;
+  }
+  const { threshold } = resolvedThreshold;
   const runId = newRunId();
 
   note("");

@@ -20,7 +20,9 @@ import {
   parseEnvFile,
   resolveCredential,
 } from "./credential.js";
-import { flagBool, flagNumber, flagString, parseArgv } from "./index.js";
+import { version as packageVersion } from "../../package.json" with { type: "json" };
+import { FAIL_ON_VALUES, resolveThreshold } from "./commands/scan.js";
+import { flagBool, flagNumber, flagString, main, parseArgv } from "./index.js";
 import { renderRunConsole, renderRunMarkdown, sortFindings } from "./render.js";
 import { listRuns, loadRun, newRunId, saveRun, type StoredRun } from "./store.js";
 import type { Finding } from "../types.js";
@@ -497,6 +499,62 @@ describe("render", () => {
     expect(markdown).toContain("**candidate**");
     expect(markdown).toContain("`src/db.ts:7`");
     expect(markdown).not.toContain("| confirmed |");
+  });
+
+  test("every documented --fail-on value is accepted", () => {
+    for (const value of FAIL_ON_VALUES) {
+      expect(resolveThreshold(value).ok).toBe(true);
+    }
+    expect([...FAIL_ON_VALUES].sort()).toEqual([
+      "any",
+      "critical",
+      "high",
+      "low",
+      "medium",
+      "never",
+    ]);
+  });
+
+  test("omitting --fail-on defaults to high", () => {
+    const resolved = resolveThreshold(undefined);
+    expect(resolved.ok).toBe(true);
+    if (!resolved.ok) return;
+    expect(resolved.threshold).toBe("high");
+  });
+
+  test("--version reports a version rather than falling through to help", async () => {
+    // The failure this guards: `--version` parses to no command, so a version
+    // check placed after the "no command means help" branch never ran and
+    // --version printed the help banner.
+    const lines: string[] = [];
+    const original = console.log;
+    console.log = (...parts: unknown[]): void => {
+      lines.push(parts.map(String).join(" "));
+    };
+    let code: number;
+    try {
+      code = await main(["--version"]);
+    } finally {
+      console.log = original;
+    }
+    expect(code).toBe(0);
+    expect(lines.join("\n")).toBe(`secondpass ${packageVersion}`);
+  });
+
+  test("the reported version tracks package.json", () => {
+    // Hardcoding it meant --version kept reporting the previous release.
+    expect(packageVersion).toMatch(/^\d+\.\d+\.\d+/);
+  });
+
+  test("a misspelled --fail-on is rejected, not silently ignored", () => {
+    // The failure this guards: an unknown threshold matched no severity, so
+    // `--fail-on hgih` in a CI config passed every run, criticals included.
+    for (const typo of ["hgih", "HIGH", "sev:high", ""]) {
+      const resolved = resolveThreshold(typo);
+      expect(resolved.ok).toBe(false);
+      if (resolved.ok) continue;
+      expect(resolved.error).toContain("Unknown --fail-on value");
+    }
   });
 
   test("NO_COLOR suppresses escape codes", () => {
