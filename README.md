@@ -8,6 +8,22 @@ trusting into findings.
 link, no hosted sandbox, no AI gateway. Export a key for a model you already
 pay for and run the scanner.
 
+> ### Built on deepsec
+>
+> **secondpass is a derivative work of [deepsec](https://github.com/vercel-labs/deepsec)**
+> by Vercel, used under the Apache License 2.0. The two-stage idea is theirs; this
+> is an independent implementation of it that removes the Vercel dependency.
+>
+> It is *not* a code fork — no source is copied and there is no shared git
+> history, so there is no upstream to merge from. What is carried over is the
+> architecture: the scan → adjudicate split, the `Matcher` record shape, the
+> `INFO.md` convention, and the vulnerability-category vocabulary. Every regex
+> here was newly authored, and the Vercel AI Gateway, project link, and Sandbox
+> were all dropped rather than reimplemented — which is what makes the one-key
+> setup above possible.
+>
+> Full statement of changes, as required by Apache-2.0 §4(b): [`NOTICE`](./NOTICE).
+
 ---
 
 ## 60 seconds
@@ -504,14 +520,24 @@ Be honest about what this catches and what it doesn't:
 
 ## License and provenance
 
-Apache-2.0. This package is a derivative of Vercel's
-[deepsec](https://github.com/vercel-labs/deepsec) — full statement of
-changes in [`NOTICE`](./NOTICE), as required by Apache-2.0 §4(b).
+secondpass is licensed under Apache-2.0, and is a **derivative work of
+[deepsec](https://github.com/vercel-labs/deepsec)** (Copyright Vercel, Inc. and
+contributors), also Apache-2.0. The full statement of changes required by
+Apache-2.0 §4(b) is in [`NOTICE`](./NOTICE); the license itself is in
+[`LICENSE`](./LICENSE). Both files travel with the package on npm.
 
-What's Vercel's: the two-stage scan/adjudicate architecture, the `Matcher`
-record shape, and the `INFO.md` convention. What's not: every regex in this
-package was newly authored — no pattern source was copied from the deepsec
-bundle. And there is no dependency on Vercel's AI Gateway, its project-linking
-flow, or Vercel Sandbox — all three were deliberately dropped, not carried
-forward. The sandbox here is agentOS.
-That last part is the point of the setup story at the top of this file.
+**What is Vercel's:** the two-stage scan/adjudicate architecture, the `Matcher`
+record shape, the `INFO.md` convention, and the vulnerability-category
+vocabulary.
+
+**What is not:** every regex in this package was newly authored — no pattern
+source was copied from the deepsec bundle. There is no dependency on Vercel's
+AI Gateway, its project-linking flow, or Vercel Sandbox; all three were dropped
+rather than carried forward, which is precisely what makes the one-key setup at
+the top of this file possible. The sandbox here is agentOS. The CLI, the on-disk
+run record, the multi-tenancy matcher family, and the `bench/` measurement suite
+have no deepsec counterpart.
+
+Being a derivative work and not a fork has one practical consequence worth
+stating: there is no upstream branch to track. deepsec improvements do not flow
+here automatically, and nothing here flows back.

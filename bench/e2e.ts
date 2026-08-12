@@ -257,12 +257,16 @@ interface PricingInfo {
 }
 
 /**
- * Anthropic first-party API rates, USD per 1M tokens (cached 2026-06-24).
- * `claude-sonnet-4-5` — the sandbox transport's actual default model
- * (`DEFAULT_MODEL_BY_PI_PROVIDER.anthropic` in agentos-runner.ts) — is not on
- * the current rate card; it is priced here at the Sonnet-5/4.6 rate as the
- * closest known analog and flagged `approximated` below. Override with
- * `--price-input`/`--price-output` for an exact figure.
+ * Rough per-model rates, USD per 1M tokens, for the cost ESTIMATE this harness
+ * prints before a live run. These are hand-maintained defaults, not a quoted
+ * price list — they drift the moment a provider changes pricing or ships a
+ * model that isn't in this table, and nothing here re-checks them.
+ *
+ * Treat every dollar figure in the report as an order-of-magnitude sanity check
+ * on whether to spend, never as a bill. For a real number, pass
+ * `--price-input` / `--price-output` from your provider's current pricing page;
+ * an unknown model falls back to `SONNET_FALLBACK_RATE` and is flagged
+ * `approximated` in the output so the report never quietly implies precision.
  */
 const MODEL_PRICING_USD_PER_MTOK: Readonly<Record<string, { input: number; output: number }>> = {
   "claude-fable-5": { input: 10, output: 50 },
