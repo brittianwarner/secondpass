@@ -110,12 +110,8 @@ export async function runScanCommand(args: ParsedArgs): Promise<number> {
   }
   note("");
 
-  let adjudicationTotal = 0;
-  let adjudicationFailures = 0;
   const progress = makeProgressReporter({ quiet, paint });
   const onEvent = (event: RunEvent): void => {
-    if (event.kind === "adjudication-started") adjudicationTotal = event.prompts;
-    if (event.kind === "adjudication-progress" && !event.ok) adjudicationFailures += 1;
     progress(event);
   };
 
@@ -187,10 +183,13 @@ export async function runScanCommand(args: ParsedArgs): Promise<number> {
 
   // A run where every adjudication failed has not found "nothing" — it has
   // found out nothing. Reporting that as a pass would be a lie the exit code
-  // tells to a CI system that cannot check.
-  if (adjudicate && adjudicationTotal > 0 && adjudicationFailures === adjudicationTotal) {
+  // tells to a CI system that cannot check. Measured on verdicts returned, not
+  // on calls that completed: a bad credential answers every call with an error
+  // body, which is a successful call carrying no verdict.
+  const adjudication = stored.adjudication;
+  if (adjudicate && adjudication !== undefined && adjudication.prompts > 0 && adjudication.answered === 0) {
     console.error(
-      paint("red", `  All ${adjudicationTotal} adjudication(s) failed. This run makes no claim about the code.`),
+      paint("red", `  All ${adjudication.prompts} adjudication(s) failed. This run makes no claim about the code.`),
     );
     console.error(paint("dim", `  Try: secondpass doctor --probe`));
     console.error("");

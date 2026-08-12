@@ -95,6 +95,20 @@ export interface RunScanResult {
    * a run — but a report that hides them is a lie, so they are first-class.
    */
   errors: string[];
+  /**
+   * How many prompts were sent to the model, and how many came back with a
+   * verdict attached. A prompt can fail two ways that look nothing alike from
+   * inside — the sandbox call errors, or the call succeeds and returns text no
+   * verdict can be parsed out of — but they mean the same thing to a caller:
+   * nothing was learned about that file. Counting only transport failures is
+   * how a run with a bad API key reports a clean pass.
+   *
+   * Absent when adjudication never ran.
+   */
+  adjudication?: {
+    prompts: number;
+    answered: number;
+  };
   durationMs: number;
 }
 
@@ -256,6 +270,7 @@ export async function runScan(params: RunScanParams): Promise<RunScanResult> {
   });
 
   const findings: Finding[] = [];
+  let answered = 0;
   for (let i = 0; i < units.length; i += 1) {
     const unit = units[i] as PromptUnit;
     const outcome = outcomes[i];
@@ -268,8 +283,15 @@ export async function runScan(params: RunScanParams): Promise<RunScanResult> {
       filePath: unit.filePath,
       candidates: unit.candidates,
     });
+    // A prompt counts as answered only if a verdict came out of it. Text that
+    // parsed into nothing is a failed prompt wearing a successful call's
+    // clothes — an auth error body reaches this line looking exactly like a
+    // model that had no findings to report.
+    if (parsed.findings.length > 0) answered += 1;
     findings.push(...parsed.findings);
-    for (const err of parsed.errors) errors.push(`${unit.filePath}: ${err}`);
+    // parseAdjudicationResponse already prefixes every error with the file
+    // path; prefixing again produced "db.ts: db.ts: …".
+    for (const err of parsed.errors) errors.push(err);
   }
 
   onEvent?.({
@@ -278,5 +300,11 @@ export async function runScan(params: RunScanParams): Promise<RunScanResult> {
     durationMs: Date.now() - adjudicationStartedMs,
   });
 
-  return finish({ ...base, adjudicated: true, findings, errors });
+  return finish({
+    ...base,
+    adjudicated: true,
+    findings,
+    errors,
+    adjudication: { prompts: units.length, answered },
+  });
 }

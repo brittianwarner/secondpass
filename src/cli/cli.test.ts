@@ -427,6 +427,28 @@ describe("render", () => {
     );
   });
 
+  test("a run that returned no verdicts does not read as a clean bill of health", () => {
+    // The failure this guards: a bad credential makes every call return an
+    // error body, which parses to zero findings. Rendered as "Nothing
+    // confirmed", that announces a pass for work that never happened.
+    const run = RUN({ findings: [], adjudication: { prompts: 2, answered: 0 } });
+    const out = renderRunConsole(run, { color: false });
+    expect(out).toContain("No verdicts returned");
+    expect(out).toContain("makes no claim");
+    expect(out).not.toContain("Nothing confirmed");
+    expect(out).not.toContain("All 0 candidate(s) were ruled out");
+  });
+
+  test("nothing confirmed still reads clean when adjudication actually ruled candidates out", () => {
+    const run = RUN({
+      findings: [FINDING({ verdict: "false-positive" })],
+      adjudication: { prompts: 1, answered: 1 },
+    });
+    const out = renderRunConsole(run, { color: false });
+    expect(out).toContain("Nothing confirmed");
+    expect(out).toContain("All 1 candidate(s) were ruled out");
+  });
+
   test("each verdict renders under its own tag — a ruled-out finding never reads as open", () => {
     const run = RUN({
       findings: [

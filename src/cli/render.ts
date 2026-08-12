@@ -116,10 +116,20 @@ export function renderRunConsole(run: StoredRun, options: RenderOptions = {}): s
   lines.push("");
 
   if (shown.length === 0) {
-    lines.push(
-      paint("green", "  Nothing confirmed.") +
-        paint("dim", ` All ${falsePositive.length} candidate(s) were ruled out by adjudication.`),
-    );
+    // "Nothing confirmed" is only good news if adjudication actually returned
+    // verdicts. With no verdicts at all, the green line would be announcing a
+    // clean bill of health for work that never happened.
+    if (sorted.length === 0 && run.scan.candidatesFound > 0) {
+      lines.push(
+        paint("yellow", "  No verdicts returned.") +
+          paint("dim", ` ${run.scan.candidatesFound} candidate(s) went unadjudicated — this run makes no claim.`),
+      );
+    } else {
+      lines.push(
+        paint("green", "  Nothing confirmed.") +
+          paint("dim", ` All ${falsePositive.length} candidate(s) were ruled out by adjudication.`),
+      );
+    }
     lines.push("");
   }
 
