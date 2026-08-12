@@ -1,6 +1,6 @@
 {
   "name": "secondpass",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Two-stage security scanner: a free deterministic regex pass, then an AI pass that adjudicates each candidate inside an agentOS sandbox. An Apache-2.0 derivative of Vercel's deepsec, with no Vercel dependency.",
   "license": "Apache-2.0",
   "author": "Brittian Warner <brittian@layerr.ai>",
