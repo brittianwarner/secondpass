@@ -1,0 +1,8 @@
+{
+  "key": "e7923c297e8f63ad5d9d005493dcad01",
+  "file": "positive/non-atomic-read-delete/idempotency-check-then-delete.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"non-atomic-read-delete\",\n    \"lineNumbers\": [11, 12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Race condition allows duplicate payment processing when concurrent requests check and delete the same idempotency key non-atomically.\",\n    \"rationale\": \"Lines 11-12 perform a non-atomic check-then-delete sequence on the cache. Two concurrent requests with the same idempotencyKey can both pass the `cache.has()` check at line 11 before either executes `cache.delete()` at line 12. Both requests then proceed to call `chargeCustomer()` at line 13, causing the customer to be charged twice. The time gap between the async `has()` and `delete()` operations creates a TOCTOU vulnerability that violates idempotency guarantees critical for payment processing.\",\n    \"failureScenario\": \"Two concurrent requests arrive with idempotencyKey='payment-abc123'. Request A evaluates cache.has() at line 11 and gets true. Before A reaches line 12, Request B also evaluates cache.has() and gets true. Both requests then delete the key and call chargeCustomer(), resulting in duplicate charges for the same logical payment operation.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.324Z",
+  "elapsedMs": 19733.745922727274
+}

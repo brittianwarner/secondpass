@@ -1,0 +1,8 @@
+{
+  "key": "690f7e35febef7811c573e548b660d78",
+  "file": "positive/insecure-crypto/des-cipher.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"insecure-crypto\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"medium\",\n    \"summary\": \"Uses Triple DES (des-ede3-cbc), a deprecated cipher vulnerable to Sweet32 birthday attacks due to its 64-bit block size.\",\n    \"rationale\": \"Line 11 instantiates a cipher using 'des-ede3-cbc' (Triple DES in CBC mode). Triple DES has been deprecated by NIST and other standards bodies because its 64-bit block size enables practical birthday attacks (Sweet32) when encrypting large data volumes. The file comments confirm this handles significant volumes, making the attack feasible. Modern applications should use AES-256-GCM or ChaCha20-Poly1305 instead.\",\n    \"failureScenario\": \"When encryptLegacyExport is called repeatedly to encrypt approximately 32 GB or more of data under the same key (common in long-lived sessions or bulk exports), an attacker monitoring the encrypted traffic can exploit block collisions via the Sweet32 attack to recover plaintext patterns or entire blocks, violating confidentiality guarantees.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.947Z",
+  "elapsedMs": 19861.581153018178
+}

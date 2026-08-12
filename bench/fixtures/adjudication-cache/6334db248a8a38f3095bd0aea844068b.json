@@ -1,0 +1,8 @@
+{
+  "key": "6334db248a8a38f3095bd0aea844068b",
+  "file": "positive/auth-bypass/client-supplied-admin-flag.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"auth-bypass\",\n    \"lineNumbers\": [18],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Authorization bypass via client-controlled admin flag allows any user to self-promote to admin.\",\n    \"rationale\": \"Line 18 checks `req.body.isAdmin`, which is client-supplied data from the request payload (defined in ProvisionUserBody interface), to decide whether to call `grantAdminRole`. The application trusts the privilege claim sent by the caller instead of verifying the authenticated user's actual role from a secure session or database. Any client can set `isAdmin: true` in their request to gain admin privileges.\",\n    \"failureScenario\": \"An attacker sends a POST request to the provisioning endpoint with payload `{\\\"email\\\": \\\"attacker@example.com\\\", \\\"isAdmin\\\": true}`. The handler reads the `isAdmin` flag directly from `req.body` and executes `grantAdminRole(\\\"attacker@example.com\\\")`, granting the attacker admin privileges without any authorization check.\",\n    \"confidence\": 0.98\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.944Z",
+  "elapsedMs": 19861.581153018178
+}

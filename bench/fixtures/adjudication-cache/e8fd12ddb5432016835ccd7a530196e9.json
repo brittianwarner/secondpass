@@ -1,0 +1,8 @@
+{
+  "key": "e8fd12ddb5432016835ccd7a530196e9",
+  "file": "positive/non-atomic-read-delete/idempotency-check-then-delete.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"non-atomic-read-delete\",\n    \"lineNumbers\": [11, 12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Non-atomic check-then-delete allows concurrent requests to both pass the idempotency check and duplicate the payment operation.\",\n    \"rationale\": \"Lines 11-12 perform separate await operations for cache.has() and cache.delete(), creating a race window. Between the `has` check completing (line 11) and the `delete` executing (line 12), a second concurrent request can also pass the `has` check, causing both to proceed to line 13 and charge the customer twice. This violates the idempotency guarantee that the check is meant to provide.\",\n    \"failureScenario\": \"Two concurrent API requests arrive with idempotency key 'pay-456' while the key exists in cache. Request A executes cache.has('pay-456') returning true, then Request B executes cache.has('pay-456') also returning true before A deletes. Both requests proceed past the if-block, both execute chargeCustomer('pay-456'), resulting in duplicate charges to the customer.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

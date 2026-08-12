@@ -1,0 +1,8 @@
+{
+  "key": "14a9111dcd06efbf139dfdbf0fc927a4",
+  "file": "positive/test-header-bypass/allow-insecure-tls-flag.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"test-header-bypass\",\n    \"lineNumbers\": [9],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Environment variable ALLOW_INSECURE_TLS disables TLS certificate verification when set to \\\"1\\\", enabling man-in-the-middle attacks.\",\n    \"rationale\": \"Line 9 reads process.env.ALLOW_INSECURE_TLS and when set to \\\"1\\\", causes shouldVerifyTls() to return false (line 10), disabling TLS verification. This is a runtime control that weakens a critical security mechanism and is vulnerable to accidental production misconfiguration through environment variable management errors or forgotten debug settings.\",\n    \"failureScenario\": \"Deploy the application to production with ALLOW_INSECURE_TLS=1 set in the environment (e.g., copied from development configuration or set for debugging and forgotten). When shouldVerifyTls() is called to determine whether to verify server certificates, it returns false. An attacker positioned on the network path can then present a fraudulent certificate, intercept the TLS handshake, and perform a man-in-the-middle attack to read or modify all application traffic.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.325Z",
+  "elapsedMs": 19733.745922727274
+}

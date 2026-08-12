@@ -1,0 +1,8 @@
+{
+  "key": "d1043a8496e254bbcc1708b7856ad3db",
+  "file": "negative/secret-in-log/comment-with-call-syntax.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"secret-in-log\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"The code logs Boolean(apiKey) which evaluates to true/false, not the actual secret value.\",\n    \"rationale\": \"Line 11 logs `{ hasApiKey: Boolean(apiKey) }`. The Boolean() conversion produces only `true` or `false`, never the actual API key string. This is a safe presence-check pattern that does not leak the secret. The comment on line 10 references the old vulnerable code that actually logged the key itself, but the current implementation is secure.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.946Z",
+  "elapsedMs": 19861.581153018178
+}

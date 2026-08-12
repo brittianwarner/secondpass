@@ -1,0 +1,8 @@
+{
+  "key": "7c106bf5cc4831d9c2e71b813938a18d",
+  "file": "positive/jwt-handling/decode-without-verify.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"jwt-handling\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"JWT token is decoded without signature verification, allowing attackers to forge tokens with arbitrary claims including elevated roles.\",\n    \"rationale\": \"Line 11 uses `jwt.decode(token)` which extracts the payload without validating the cryptographic signature. The decoded claims containing `userId` and `role` are then returned and trusted directly. Unlike `jwt.verify()`, the `decode` method performs no signature validation, allowing anyone to craft a token with arbitrary claims such as `role: \\\"admin\\\"` and have it accepted by the application.\",\n    \"failureScenario\": \"An attacker constructs a JWT token with payload {\\\"userId\\\": \\\"attacker\\\", \\\"role\\\": \\\"admin\\\"}, base64-encodes it, and submits it to any endpoint calling getUserFromToken. The function decodes and returns these claims without verification, granting the attacker admin privileges despite never being authenticated by the legitimate token issuer.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.947Z",
+  "elapsedMs": 19861.581153018178
+}

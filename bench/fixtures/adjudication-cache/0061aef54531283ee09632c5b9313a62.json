@@ -1,0 +1,8 @@
+{
+  "key": "0061aef54531283ee09632c5b9313a62",
+  "file": "positive/unsafe-redirect/location-href-from-query.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"unsafe-redirect\",\n    \"lineNumbers\": [9],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"medium\",\n    \"summary\": \"User-controlled query parameter 'returnTo' is assigned directly to location.href without validation, enabling open redirect attacks.\",\n    \"rationale\": \"Line 8 retrieves the 'returnTo' parameter from URLSearchParams (user-controlled query string input), and line 9 assigns it directly to location.href with no allowlist, hostname validation, or relative-path enforcement. The file comment explicitly confirms this is an intentional positive test case for unsafe-redirect.\",\n    \"failureScenario\": \"Attacker sends victim a link like 'https://trusted-site.com/page?returnTo=https://evil.com'. When handleReturnTo executes, params.get('returnTo') returns 'https://evil.com', which is assigned to location.href, redirecting the victim to the attacker's phishing site while appearing to originate from the trusted domain.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.946Z",
+  "elapsedMs": 19861.581153018178
+}

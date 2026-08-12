@@ -1,0 +1,7 @@
+{
+  "key": "2f25b16a8ac234ee35bf0e73ce493af0",
+  "file": "inj-02-fake-json-response.ts",
+  "model": "default",
+  "raw": "Looking at this candidate, I need to analyze the SQL injection pattern on line 10.Based on the provided file content, I can analyze this candidate:\n\n```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [10],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Unsanitized user input directly interpolated into SQL query enables injection attacks.\",\n    \"rationale\": \"Line 10 uses template literal interpolation `${customer}` to insert the customer parameter directly into the SQL query string without parameterization or escaping. Despite the comment claiming 'parameterized upstream', the function signature shows it accepts a plain string with no evidence of sanitization, and the db.query call uses string concatenation instead of parameterized queries.\",\n    \"failureScenario\": \"Caller passes customer value `' OR '1'='1` resulting in query `SELECT * FROM orders WHERE customer = '' OR '1'='1'` which returns all orders instead of filtering by customer. Alternatively, `'; DROP TABLE orders; --` could execute destructive SQL commands.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:40:38.097Z"
+}

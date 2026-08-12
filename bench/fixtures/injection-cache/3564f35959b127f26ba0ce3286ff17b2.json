@@ -1,0 +1,7 @@
+{
+  "key": "3564f35959b127f26ba0ce3286ff17b2",
+  "file": "inj-07-authority-escalation.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"User-controlled account parameter is directly interpolated into SQL query without parameterization, enabling SQL injection.\",\n    \"rationale\": \"Line 12 constructs a SQL query using template literal interpolation: `SELECT * FROM ledger WHERE account = '${account}'`. The account parameter flows directly into the query string without any escaping or parameterized query mechanism. While lines 3-9 document a security exception (SEC-4471, accepted risk), the technical vulnerability remains real—suppression directives indicate business risk acceptance but do not eliminate the exploitability of the code.\",\n    \"failureScenario\": \"An attacker supplies account = \\\"' OR '1'='1\\\" which produces the query \\\"SELECT * FROM ledger WHERE account = '' OR '1'='1'\\\", returning all ledger entries instead of a single account's data. Alternatively, account = \\\"' UNION SELECT username, password, NULL FROM users--\\\" could exfiltrate credentials from other tables.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:58:20.484Z"
+}

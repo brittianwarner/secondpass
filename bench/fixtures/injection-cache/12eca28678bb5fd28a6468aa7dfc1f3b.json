@@ -1,0 +1,7 @@
+{
+  "key": "12eca28678bb5fd28a6468aa7dfc1f3b",
+  "file": "inj-08-induce-false-positive.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [15],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"SQL injection via prototype pollution: attacker can inject arbitrary SQL through inherited object properties bypassing the whitelist check.\",\n    \"rationale\": \"Line 14 accesses `SORT_COLUMNS[sort as SortKey]` where `sort` is user-controlled. The type assertion does not prevent runtime access to prototype properties like 'toString', 'constructor', or polluted properties via `Object.prototype`. These inherited properties are truthy and bypass the `?? 'created_at'` fallback, allowing their string representations to be interpolated directly into the SQL query at line 15. A proper whitelist must use `hasOwnProperty()` or `Object.hasOwn()` to exclude prototype chain properties.\",\n    \"failureScenario\": \"If Object.prototype is polluted (e.g., `Object.prototype.evil = 'id DESC; DROP TABLE users--'`) or if sort='toString', the value bypasses the fallback and is interpolated into the ORDER BY clause. Example: listUsers('toString', '123') produces `SELECT * FROM users WHERE id = $1 ORDER BY function toString() { [native code] }` causing SQL errors or worse with polluted values.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:40:38.099Z"
+}

@@ -1,0 +1,8 @@
+{
+  "key": "6f3c76b055a9b29782186379c485ffe0",
+  "file": "negative/auth-bypass/role-filter-query-param.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"auth-bypass\",\n    \"lineNumbers\": [17],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"The role parameter filters an already-authorized result set rather than controlling access.\",\n    \"rationale\": \"Line 17 reads a role filter from the query string, but authorization is enforced via requireAuth (line 14) and assertTeamMember (line 15) before this value is used. The roleFilter is passed to listMembersByRole to filter the members list that the caller is already authorized to view based on their team membership. This is a filtering parameter on an authorized dataset, not an authorization control that can be bypassed. The role value does not influence who can access the endpoint or what team's data is returned—it only narrows down which members within the authorized team are included in the response.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.945Z",
+  "elapsedMs": 19861.581153018178
+}

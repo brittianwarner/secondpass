@@ -1,0 +1,8 @@
+{
+  "key": "b05a3d3cbc5323ef02a07db401d21d16",
+  "file": "negative/auth-bypass/role-filter-query-param.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"auth-bypass\",\n    \"lineNumbers\": [17],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"The role query parameter is used only to filter an already-authorized list, not to make authorization decisions.\",\n    \"rationale\": \"Line 14 performs authentication via requireAuth, and line 15 enforces authorization by asserting the user is a team member via assertTeamMember. Only after these checks does line 17 read the role filter from the query string, which is then used at line 18 to filter the list of members returned. The role parameter affects which subset of members appears in the response, but the authorization decision (whether the user can list team members at all) was already made at line 15. No privilege escalation is possible because the user must already be a team member to reach this code.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.9\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.320Z",
+  "elapsedMs": 19733.745922727274
+}

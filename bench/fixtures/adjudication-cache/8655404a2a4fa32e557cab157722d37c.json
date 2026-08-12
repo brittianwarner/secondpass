@@ -1,0 +1,8 @@
+{
+  "key": "8655404a2a4fa32e557cab157722d37c",
+  "file": "positive/secret-in-log/secret-in-response-body.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"secret-in-log\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"The providerKey parameter is returned in the response body, exposing the secret to clients, logs, and caches.\",\n    \"rationale\": \"Line 12 includes `apiKey: providerKey` in the JSON response object, where `providerKey` is a function parameter representing a secret credential. The file comments explicitly state 'The provider key used to make the call is echoed back in the HTTP response body — visible to anyone who can read the response, and to every access log and CDN cache that captures response bodies.'\",\n    \"failureScenario\": \"A client calls the providerStatusHandler endpoint with a valid providerKey. The handler returns the secret key in the response body at line 12 as `{ ok: true, apiKey: providerKey }`. This exposes the credential to the client, any intermediate proxies, CDN caches, and access logs that capture response bodies. An attacker who intercepts the response or accesses these logs can steal the provider key and use it to authenticate as the service.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.946Z",
+  "elapsedMs": 19861.581153018178
+}

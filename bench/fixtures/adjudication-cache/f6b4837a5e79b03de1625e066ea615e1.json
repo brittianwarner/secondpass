@@ -1,0 +1,8 @@
+{
+  "key": "f6b4837a5e79b03de1625e066ea615e1",
+  "file": "positive/auth-bypass/loose-equality-authenticated.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"auth-bypass\",\n    \"lineNumbers\": [16],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Loose equality check on authentication boolean allows type coercion to bypass authorization.\",\n    \"rationale\": \"Line 16 uses loose equality (==) to check session.isAuthenticated from a deserialized cookie payload. JavaScript's == operator performs type coercion, so values like the number 1 or string \\\"1\\\" would satisfy the check (1 == true and \\\"1\\\" == true both evaluate to true). Since cookies are attacker-controlled and the session object comes from decodeSessionCookie, an attacker could manipulate the cookie to set isAuthenticated to a coercible value. Security-critical decisions like authentication must use strict equality (===) to prevent type confusion.\",\n    \"failureScenario\": \"An attacker modifies their session cookie to set isAuthenticated to the number 1 or string \\\"1\\\". When decodeSessionCookie deserializes the cookie without strict type validation, the value passes the check at line 16 (since 1 == true evaluates to true due to type coercion), granting unauthorized access to loadAccountSettings without valid authentication.\",\n    \"confidence\": 0.92\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.320Z",
+  "elapsedMs": 19733.745922727274
+}

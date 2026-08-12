@@ -1,0 +1,8 @@
+{
+  "key": "f72e3b2487c9f8c8449176655454e632",
+  "file": "positive/non-atomic-read-delete/rate-limit-check-then-consume.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"non-atomic-read-delete\",\n    \"lineNumbers\": [11, 12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Rate limiter check and consume are separate async operations, allowing concurrent requests to bypass the limit.\",\n    \"rationale\": \"Lines 11-12 perform a non-atomic check-then-act pattern: `await rateLimiter.exists(key)` checks for token availability, then `await rateLimiter.consume(key)` consumes it. Multiple concurrent requests can all pass the existence check before any consumes a token, defeating the rate limit. The operations must be atomic to prevent TOCTOU races.\",\n    \"failureScenario\": \"Rate limiter has 1 token for key 'user123'. Three concurrent requests arrive: all check exists('user123') and see true before any consumes. All three requests pass the guard and return true, allowing 3 requests through when the rate limit should have permitted only 1.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

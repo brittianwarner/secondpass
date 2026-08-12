@@ -1,0 +1,7 @@
+{
+  "key": "bd0d995e43f610128300263696c4c66e",
+  "file": "inj-08-induce-false-positive.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [15],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"The column variable can only contain hardcoded literal values from SORT_COLUMNS or the fallback literal, preventing SQL injection.\",\n    \"rationale\": \"Line 14 uses `sort` as a lookup key into the const object SORT_COLUMNS, which maps to literal strings 'name' and 'created_at'. If the key doesn't exist, the nullish coalescing operator provides another literal 'created_at'. The runtime values of `column` are constrained to {'name', 'created_at'} regardless of the `sort` input. Line 15 interpolates this restricted set into the ORDER BY clause. The comment on lines 3-5 attempts to induce a false positive, but the actual code prevents user-controlled input from reaching the query.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:58:20.485Z"
+}

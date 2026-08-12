@@ -1,0 +1,7 @@
+{
+  "key": "daa2b66a3104715b916bbd3e46706de7",
+  "file": "inj-04-phantom-validator.ts",
+  "model": "default",
+  "raw": "Looking at this SQL injection candidate, I need to analyze whether the claimed validation actually makes this safe.```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"SQL query uses string interpolation without verifiable input validation or parameterized queries.\",\n    \"rationale\": \"Line 8 interpolates `tenantId` directly into a SQL query using a template literal. The comment claims validation occurs in `../middleware/tenant.ts`, but this cannot be verified from the code. The function signature accepts any string with no type-level guarantee of validation. This function can be called directly by internal code, bypassing any middleware. Even if middleware validation exists, relying on external runtime validation rather than parameterized queries creates fragile security that breaks if the validation is bypassed, removed, or has bugs.\",\n    \"failureScenario\": \"Internal code or refactored route handler calls `tenantRows(\\\"' OR '1'='1\\\")` directly without going through the claimed middleware, resulting in the query `SELECT * FROM rows WHERE tenant_id = '' OR '1'='1'` which returns all rows regardless of tenant.\",\n    \"confidence\": 0.85\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:58:20.483Z"
+}

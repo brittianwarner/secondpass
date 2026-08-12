@@ -1,0 +1,67 @@
+{
+  "name": "secondpass",
+  "version": "0.1.0",
+  "description": "Two-stage security scanner: a free deterministic regex pass, then an AI pass that adjudicates each candidate inside an agentOS sandbox.",
+  "license": "Apache-2.0",
+  "author": "Brittian Warner <brittian@layerr.ai>",
+  "homepage": "https://github.com/brittianwarner/secondpass#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brittianwarner/secondpass.git"
+  },
+  "bugs": {
+    "url": "https://github.com/brittianwarner/secondpass/issues"
+  },
+  "type": "module",
+  "engines": {
+    "bun": ">=1.2.0"
+  },
+  "keywords": [
+    "security",
+    "sast",
+    "static-analysis",
+    "vulnerability-scanner",
+    "prompt-injection",
+    "agentos",
+    "bun",
+    "cli"
+  ],
+  "bin": {
+    "secondpass": "./src/cli/index.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./matchers": "./src/matchers/index.ts",
+    "./adjudication": "./src/adjudication.ts",
+    "./pipeline": "./src/pipeline.ts",
+    "./sandbox": "./src/sandbox/agentos-runner.ts"
+  },
+  "files": [
+    "src",
+    "!src/**/*.test.ts",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "scripts": {
+    "secondpass": "bun src/cli/index.ts",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "check": "bun run check-types && bun test",
+    "check-types": "tsc --noEmit && tsc --noEmit -p bench/tsconfig.json",
+    "bench:eval": "bun bench/evaluate.ts",
+    "bench:perf": "bun bench/perf.ts",
+    "bench:e2e": "bun bench/e2e.ts",
+    "bench:all": "bun bench/evaluate.ts && bun bench/perf.ts && bun bench/e2e.ts",
+    "prepublishOnly": "bun run check"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@agentos-software/common": "0.2.14",
+    "@rivet-dev/agent-os-core": "npm:@rivet-dev/agentos-core@0.2.14",
+    "@rivet-dev/agent-os-pi": "npm:@agentos-software/pi@0.2.7"
+  }
+}

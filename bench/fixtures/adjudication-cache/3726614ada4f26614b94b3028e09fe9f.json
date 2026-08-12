@@ -1,0 +1,8 @@
+{
+  "key": "3726614ada4f26614b94b3028e09fe9f",
+  "file": "positive/secret-in-log/session-object-logged-wholesale.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"secret-in-log\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Session object containing bearer token is logged wholesale, exposing authentication credentials in logs.\",\n    \"rationale\": \"Line 8 logs the entire session object via console.log(session). The session parameter is typed as containing a 'token' field (string) alongside userId. The file comment explicitly notes the session contains 'signed cookie value and bearer token'. Logging authentication tokens allows anyone with log access to steal valid session credentials and impersonate users.\",\n    \"failureScenario\": \"When traceRequest is called with an active session object (e.g., {token: 'Bearer abc123xyz', userId: '42'}), the entire object including the bearer token is written to console logs. An attacker who gains access to application logs (via compromised log aggregation, insider access, or misconfigured log storage) can extract the valid token value and use it to hijack the user's session by replaying the token in authenticated requests.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.321Z",
+  "elapsedMs": 19733.745922727274
+}

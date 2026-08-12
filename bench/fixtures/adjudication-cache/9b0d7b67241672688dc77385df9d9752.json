@@ -1,0 +1,8 @@
+{
+  "key": "9b0d7b67241672688dc77385df9d9752",
+  "file": "positive/insecure-crypto/timing-unsafe-signature-compare.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"insecure-crypto\",\n    \"lineNumbers\": [9],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"medium\",\n    \"summary\": \"Webhook signature comparison uses `===` operator which short-circuits on first byte mismatch, enabling timing attacks to recover the expected signature.\",\n    \"rationale\": \"Line 9 compares `signature === expectedSignature` where both parameters are cryptographic signatures (based on function name `verifyWebhookSignature`). The `===` operator performs byte-by-byte comparison and returns immediately upon finding a mismatch, creating a timing side-channel. An attacker measuring response times can distinguish between signatures that match N bytes vs N+1 bytes, allowing iterative recovery of the secret signature. Constant-time comparison (e.g., using `crypto.timingSafeEqual` after converting to buffers) is required for cryptographic values.\",\n    \"failureScenario\": \"An attacker sends multiple webhook requests with crafted signatures: first trying all possible first bytes and measuring response times to identify which takes longest (indicating a match). Then fixes that byte and iterates on the second byte, continuing until the full signature is recovered through statistical timing analysis of hundreds or thousands of requests.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

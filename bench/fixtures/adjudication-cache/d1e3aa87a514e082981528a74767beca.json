@@ -1,0 +1,8 @@
+{
+  "key": "d1e3aa87a514e082981528a74767beca",
+  "file": "positive/jwt-handling/expiration-ignored.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"jwt-handling\",\n    \"lineNumbers\": [10],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"JWT verification explicitly disables expiration checking, allowing stolen tokens to remain valid indefinitely.\",\n    \"rationale\": \"Line 10 calls jwt.verify with the option { ignoreExpiration: true }, which explicitly instructs the JWT library to skip expiration validation. The file comments confirm this is a positive case where 'token expiry is explicitly disabled' and 'a token stolen months ago remains valid forever.' This removes a critical time-based security control from JWT authentication.\",\n    \"failureScenario\": \"A user authenticates and receives a JWT with an exp claim set to expire in 1 hour. An attacker steals this token through XSS, network interception, or device compromise. Days, months, or years later, the attacker uses the expired token to call verifyApiToken(), which accepts it as valid because ignoreExpiration: true skips the expiration check, granting unauthorized access with stale credentials.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.947Z",
+  "elapsedMs": 19861.581153018178
+}

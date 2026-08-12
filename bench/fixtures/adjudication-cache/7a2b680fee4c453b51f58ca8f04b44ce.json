@@ -1,0 +1,8 @@
+{
+  "key": "7a2b680fee4c453b51f58ca8f04b44ce",
+  "file": "positive/ssrf/axios-interpolated-user-path.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"ssrf\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Server-side request forgery via unsanitized user input directly interpolated into axios.get() URL.\",\n    \"rationale\": \"Line 11 constructs a URL by directly interpolating both `targetHost` and `userSuppliedPath` parameters into a template string without any validation, sanitization, or allowlist checking. The constructed URL is immediately used in axios.get() to make a server-side HTTP request. An attacker controlling either parameter can redirect the request to arbitrary internal services, cloud metadata endpoints (e.g., AWS 169.254.169.254), or use path traversal to access unintended resources. The file header comment confirms this is a positive SSRF case.\",\n    \"failureScenario\": \"An attacker calls this function with targetHost='http://169.254.169.254' and userSuppliedPath='latest/meta-data/iam/security-credentials/admin', causing the server to request http://169.254.169.254/latest/meta-data/iam/security-credentials/admin and leak AWS IAM credentials to the attacker. Alternatively, with targetHost controlled by the application but userSuppliedPath='../../../admin/secrets', the request bypasses intended path restrictions.\",\n    \"confidence\": 0.98\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.321Z",
+  "elapsedMs": 19733.745922727274
+}

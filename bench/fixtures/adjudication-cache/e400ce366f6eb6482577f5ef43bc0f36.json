@@ -1,0 +1,8 @@
+{
+  "key": "e400ce366f6eb6482577f5ef43bc0f36",
+  "file": "positive/jwt-handling/expiration-ignored.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"jwt-handling\",\n    \"lineNumbers\": [10],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"JWT verification explicitly ignores token expiration, allowing expired tokens to be accepted as valid.\",\n    \"rationale\": \"Line 10 passes `{ ignoreExpiration: true }` to `jwt.verify()`, which disables JWT expiration checking. This means tokens that have passed their expiry date will still be validated and accepted by the API, negating a critical security control designed to limit the window of exposure if a token is compromised.\",\n    \"failureScenario\": \"An attacker obtains a valid JWT token (e.g., through network interception or a leaked backup) with an expiration time of 1 hour. Six months after the token has expired, the attacker attempts to use it to authenticate with the API. Because `ignoreExpiration: true` is set, the server accepts the expired token and grants the attacker access, even though the token should have been rejected as expired.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.323Z",
+  "elapsedMs": 19733.745922727274
+}

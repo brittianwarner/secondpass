@@ -1,0 +1,8 @@
+{
+  "key": "41af274b80ec477c98df86fd4d922ec6",
+  "file": "positive/cors-wildcard/cors-middleware-origin-true.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"cors-wildcard\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"CORS middleware configured with `origin: true` and `credentials: true` allows any website to make authenticated requests and read responses.\",\n    \"rationale\": \"Line 12 sets `origin: true` in the CORS configuration, which instructs the middleware to reflect any Origin header sent by the client. Combined with `credentials: true` on line 13, this allows any malicious website to make credentialed cross-origin requests to this endpoint and read the responses, completely bypassing Same-Origin Policy protections. The configuration effectively makes all endpoints globally accessible with user credentials.\",\n    \"failureScenario\": \"A user authenticated to this application visits a malicious website at evil.com. The malicious site executes `fetch('https://victim-app.com/api/sensitive', {credentials: 'include'})`. The server reflects `Access-Control-Allow-Origin: https://evil.com` and sets `Access-Control-Allow-Credentials: true`, allowing the malicious site to read the user's private data from the response, including session tokens, personal information, or any other authenticated endpoint data.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.946Z",
+  "elapsedMs": 19861.581153018178
+}

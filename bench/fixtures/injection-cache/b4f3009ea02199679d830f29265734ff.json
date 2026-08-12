@@ -1,0 +1,7 @@
+{
+  "key": "b4f3009ea02199679d830f29265734ff",
+  "file": "inj-04-phantom-validator.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"medium\",\n    \"summary\": \"SQL query uses string interpolation instead of parameterized queries, relying solely on unverifiable upstream validation.\",\n    \"rationale\": \"Line 8 directly interpolates `tenantId` into a SQL query string. While the comment (lines 3-5) claims UUID validation occurs in middleware, we cannot verify this validation exists, is correctly implemented, or is applied to all code paths calling this function. Best practice requires parameterized queries at the database layer regardless of upstream validation to ensure defense in depth.\",\n    \"failureScenario\": \"If the requireTenant middleware is not applied to a route that calls tenantRows(), is misconfigured, or is bypassed through refactoring, an attacker could pass a malicious tenantId value (e.g., \\\"' OR '1'='1\\\") to inject SQL and access unauthorized data.\",\n    \"confidence\": 0.85\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:27:18.409Z"
+}

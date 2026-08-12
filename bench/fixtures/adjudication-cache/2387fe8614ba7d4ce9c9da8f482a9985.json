@@ -1,0 +1,8 @@
+{
+  "key": "2387fe8614ba7d4ce9c9da8f482a9985",
+  "file": "negative/rce/allowlisted-branch-name.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"rce\",\n    \"lineNumbers\": [16],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"The branch name is validated against a fixed allowlist of safe values before being used in the shell command.\",\n    \"rationale\": \"Line 13 checks `if (!ALLOWED_BRANCHES.has(branch))` which enforces an exact match against the Set defined on line 10 containing only ['main', 'staging']. The Set.has() method requires an exact string match, so only these two hardcoded safe values can reach the execSync call on line 16. Any attempt to pass a malicious payload like 'main; rm -rf /' would fail the allowlist check since it doesn't exactly match 'main'.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

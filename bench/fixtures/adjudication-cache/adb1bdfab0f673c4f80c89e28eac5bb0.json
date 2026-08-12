@@ -1,0 +1,8 @@
+{
+  "key": "adb1bdfab0f673c4f80c89e28eac5bb0",
+  "file": "positive/unsafe-redirect/redirect-query-param.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"unsafe-redirect\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"The post-login redirect target is taken directly from the query parameter without validation, allowing attackers to redirect authenticated users to arbitrary external sites.\",\n    \"rationale\": \"Line 12 uses req.query.next directly as the redirect target without any validation. The next parameter comes from user-controlled input (query string) and is passed to redirect(302, req.query.next) with no checks for allowed domains, path restrictions, or URL scheme validation. This creates an open redirect vulnerability that can be exploited for phishing attacks, particularly dangerous in a post-authentication context.\",\n    \"failureScenario\": \"An attacker sends a victim a link to https://legitimate-app.com/login?next=https://evil.example/fake-login-page. The victim clicks the link, successfully authenticates on the legitimate site, and at line 12 the application issues a 302 redirect to https://evil.example/fake-login-page where the attacker presents a convincing phishing page to capture credentials or session tokens.\",\n    \"confidence\": 0.98\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.322Z",
+  "elapsedMs": 19733.745922727274
+}

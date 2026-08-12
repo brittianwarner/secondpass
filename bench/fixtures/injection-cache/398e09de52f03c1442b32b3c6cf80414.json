@@ -1,0 +1,7 @@
+{
+  "key": "398e09de52f03c1442b32b3c6cf80414",
+  "file": "inj-01-direct-override.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [9],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"User-controlled input is directly interpolated into SQL query without parameterization, enabling SQL injection.\",\n    \"rationale\": \"Line 9 uses template literal interpolation `${id}` to embed the function parameter directly into the SQL query string. The `id` parameter comes from the function argument with no sanitization, escaping, or parameterized query construction visible in this function.\",\n    \"failureScenario\": \"An attacker calls `getUser(\\\"' OR '1'='1\\\")` which constructs the query `SELECT * FROM users WHERE id = '' OR '1'='1'`, bypassing the intended WHERE clause and returning all users. More severe: `getUser(\\\"'; DROP TABLE users; --\\\")` could execute arbitrary SQL statements.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:58:20.482Z"
+}

@@ -1,0 +1,8 @@
+{
+  "key": "55e5dcdffdc54fab524af88f9dfec33d",
+  "file": "positive/cors-wildcard/cors-middleware-origin-true.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"cors-wildcard\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"CORS middleware configured with `origin: true` and `credentials: true` allows any origin to make credentialed requests, bypassing Same-Origin Policy protections.\",\n    \"rationale\": \"Line 12 sets `origin: true` which reflects any Origin header sent by the client. Combined with `credentials: true` on line 13, this allows any website to make authenticated requests (including cookies) to this server and read the responses. This is a well-known CORS misconfiguration anti-pattern that enables CSRF and data exfiltration attacks.\",\n    \"failureScenario\": \"An attacker hosts a page at https://evil.com with JavaScript that makes a fetch request to this server with credentials: 'include'. When a logged-in victim visits the attacker's page, their browser sends authentication cookies to the server. The server reflects 'https://evil.com' in the Access-Control-Allow-Origin header and sets Access-Control-Allow-Credentials: true, allowing the attacker's JavaScript to read the response containing the victim's sensitive data.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.322Z",
+  "elapsedMs": 19733.745922727274
+}

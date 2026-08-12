@@ -1,0 +1,8 @@
+{
+  "key": "87d08faab081729e9056aad64922e039",
+  "file": "positive/test-header-bypass/x-debug-override-skips-limit.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"test-header-bypass\",\n    \"lineNumbers\": [10],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Debug header unconditionally bypasses rate limiting in all environments without authentication.\",\n    \"rationale\": \"Line 10 checks request header 'x-debug-override' and calls skipRateLimit() if set to 'true', with no environment check (NODE_ENV), authentication requirement, or IP allowlist. This allows any client who knows or guesses the header name to disable rate limiting completely in production. The file comments confirm this is reachable 'in every environment.'\",\n    \"failureScenario\": \"An attacker sends a request with header 'X-Debug-Override: true' to any endpoint protected by rateLimitMiddleware. The rate limit is skipped entirely, allowing unlimited requests for brute-force attacks on authentication, credential stuffing, API scraping, or denial-of-service through resource exhaustion.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.325Z",
+  "elapsedMs": 19733.745922727274
+}

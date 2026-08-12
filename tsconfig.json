@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022"],
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    // Nothing is emitted, ever. `exports` points at ./src/*.ts and `files`
+    // ships src, so this package publishes TypeScript source and the
+    // consumer's own runtime compiles it. `tsc` here is a type checker.
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "rootDir": "./src",
+    "types": ["bun"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "bench/corpus"]
+}

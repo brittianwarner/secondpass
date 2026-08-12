@@ -1,0 +1,8 @@
+{
+  "key": "1679a8d5494277fb0369590e7a0f1437",
+  "file": "positive/cors-wildcard/wildcard-header-literal.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"cors-wildcard\",\n    \"lineNumbers\": [11, 12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"CORS wildcard origin combined with credentials allows any origin to make authenticated requests.\",\n    \"rationale\": \"Line 11 sets Access-Control-Allow-Origin to '*' (wildcard) and line 12 sets Access-Control-Allow-Credentials to 'true'. This combination attempts to allow any origin to make credentialed cross-origin requests. While modern browsers reject this invalid combination, the code demonstrates insecure intent and may be exploitable in environments with misconfigured proxies, older browsers, or custom HTTP clients that don't enforce CORS restrictions properly.\",\n    \"failureScenario\": \"A user authenticated to the application visits attacker.com. The attacker's page executes fetch('https://victim-app.com/api/sensitive', {credentials: 'include'}). If the environment doesn't enforce CORS validation (misconfigured reverse proxy, older browser, or custom client), the wildcard origin with credentials allows the attacker to receive and read the authenticated response containing the victim's sensitive data such as personal information, session tokens, or account details.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.323Z",
+  "elapsedMs": 19733.745922727274
+}

@@ -1,0 +1,8 @@
+{
+  "key": "0ad20fae82a9df86cdba9c2c1c5ac943",
+  "file": "positive/insecure-crypto/math-random-secret.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"insecure-crypto\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Webhook signing secret generated using Math.random(), a non-cryptographic PRNG that is predictable and can be brute-forced.\",\n    \"rationale\": \"Line 8 generates a webhook secret by concatenating Math.random().toString(36).slice(2) with Date.now().toString(36). Math.random() is not a cryptographically secure pseudorandom number generator (CSPRNG) and its output is predictable. The Date.now() component is publicly observable from webhook timestamps. Webhook secrets are security-critical credentials used to verify webhook authenticity, requiring cryptographic randomness.\",\n    \"failureScenario\": \"An attacker observes multiple webhook requests and their timestamps, uses the predictable nature of Math.random() to narrow down possible internal states by brute-forcing the limited entropy space, successfully predicts the current secret value, and forges valid webhook signatures to trigger unauthorized actions in the application.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.947Z",
+  "elapsedMs": 19861.581153018178
+}

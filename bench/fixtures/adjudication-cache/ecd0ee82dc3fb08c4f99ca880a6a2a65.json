@@ -1,0 +1,8 @@
+{
+  "key": "ecd0ee82dc3fb08c4f99ca880a6a2a65",
+  "file": "negative/secret-in-log/comment-with-call-syntax.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"secret-in-log\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"The code logs only a boolean presence flag (Boolean(apiKey)), not the actual API key value.\",\n    \"rationale\": \"Line 11 passes `{ hasApiKey: Boolean(apiKey) }` to logger.info, which converts the apiKey to a boolean (true/false) indicating presence. This does not leak the secret value. The comment on line 10 references the old, insecure pattern `logger.info({ apiKey }, \\\"debug\\\")` that should be avoided, but the actual implementation on line 11 correctly logs only the boolean flag, not the secret itself.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.92\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.322Z",
+  "elapsedMs": 19733.745922727274
+}

@@ -1,0 +1,8 @@
+{
+  "key": "286550788cfdcac4440ca6884f232466",
+  "file": "positive/unsafe-redirect/redirect-no-status-code.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"unsafe-redirect\",\n    \"lineNumbers\": [10],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"medium\",\n    \"summary\": \"Redirect target taken directly from user-controlled query parameter without validation, enabling open redirect attacks.\",\n    \"rationale\": \"Line 10 passes `url.searchParams.get(\\\"next\\\")` directly to the redirect function. This query parameter is attacker-controlled and no validation checks whether it's a safe relative URL versus an absolute URL to an external domain.\",\n    \"failureScenario\": \"An attacker crafts a URL like `https://victim-site.com/checkout?next=https://evil.com/phishing` and sends it to a victim. When the victim visits this link, handleCheckoutReturn executes and redirects them to the attacker's site, which can host a phishing page that looks like the legitimate site to steal credentials.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.322Z",
+  "elapsedMs": 19733.745922727274
+}

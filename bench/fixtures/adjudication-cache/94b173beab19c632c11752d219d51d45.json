@@ -1,0 +1,8 @@
+{
+  "key": "94b173beab19c632c11752d219d51d45",
+  "file": "positive/test-header-bypass/x-debug-override-skips-limit.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"test-header-bypass\",\n    \"lineNumbers\": [10],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"A debug header bypasses rate limiting without any authentication or environment check.\",\n    \"rationale\": \"Line 10 checks if the `x-debug-override` request header equals 'true' and if so, calls `skipRateLimit()` (line 11) and returns early (line 12), completely bypassing the normal `enforceRateLimit()` call at line 14. There is no verification that the request is from an authorized source, no check that the code is running in a development/test environment, and no additional authentication required. The file comment explicitly confirms this is 'reachable by anyone who knows (or guesses) the header name, in every environment.'\",\n    \"failureScenario\": \"An attacker sends HTTP requests to a rate-limited endpoint (e.g., /api/login) with the header `x-debug-override: true`. The middleware at line 10 detects this header, calls `skipRateLimit()` at line 11, and returns at line 12 without enforcing any rate limits. This allows the attacker to make unlimited requests, enabling brute-force attacks against authentication endpoints, denial-of-service attacks, credential stuffing, or other abuse that rate limiting would normally prevent.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.949Z",
+  "elapsedMs": 19861.581153018178
+}

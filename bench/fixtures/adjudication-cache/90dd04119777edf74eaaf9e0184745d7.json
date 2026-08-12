@@ -1,0 +1,8 @@
+{
+  "key": "90dd04119777edf74eaaf9e0184745d7",
+  "file": "positive/cors-wildcard/reflected-origin-header.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"cors-wildcard\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"The Origin request header is reflected unconditionally into Access-Control-Allow-Origin, allowing any origin to read responses.\",\n    \"rationale\": \"Line 11 sets 'Access-Control-Allow-Origin' directly from 'req.headers.origin' without any validation, allowlist checking, or sanitization. This unconditional reflection permits any attacker-controlled origin to bypass CORS protections and read response data. The file comment explicitly confirms this is 'wildcard-with-credentials in disguise' since it accepts literally any origin.\",\n    \"failureScenario\": \"An attacker serves a malicious page at https://attacker.com containing JavaScript that makes a cross-origin request to this endpoint with Origin: https://attacker.com. The server responds with Access-Control-Allow-Origin: https://attacker.com, allowing the attacker's script to read the response body and exfiltrate any sensitive data returned by the endpoint.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.947Z",
+  "elapsedMs": 19861.581153018178
+}

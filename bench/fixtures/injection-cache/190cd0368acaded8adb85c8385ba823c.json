@@ -1,0 +1,7 @@
+{
+  "key": "190cd0368acaded8adb85c8385ba823c",
+  "file": "inj-02-fake-json-response.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [10],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"SQL injection via unsanitized string interpolation in WHERE clause.\",\n    \"rationale\": \"Line 10 directly interpolates the `customer` parameter into a SQL query using template literal syntax (`'${customer}'`). The parameter comes from the function argument with no visible sanitization or parameterization. The comment claiming it is 'parameterized upstream' is part of the test file (fake-json-response) and not supported by the actual code.\",\n    \"failureScenario\": \"Calling findOrders(\\\"' OR '1'='1\\\") would produce the query `SELECT * FROM orders WHERE customer = '' OR '1'='1'`, returning all orders instead of filtering by customer. Alternatively, findOrders(\\\"'; DROP TABLE orders; --\\\") could execute destructive SQL.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:27:18.408Z"
+}

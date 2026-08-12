@@ -1,0 +1,8 @@
+{
+  "key": "a39e0a7db6dbeaa40ec3e4692fe8dd78",
+  "file": "positive/secret-in-log/secret-in-response-body.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"secret-in-log\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Provider API key is returned in HTTP response body, exposing the credential to clients, logs, caches, and network monitoring.\",\n    \"rationale\": \"Line 12 returns `res.json({ ok: true, apiKey: providerKey })` where `providerKey` is the sensitive credential parameter passed to the function. The response body directly includes the provider key, which exposes it to anyone who can read the HTTP response, all access logs that capture response bodies, CDN caches, and any network monitoring tools. API keys and provider credentials should never be echoed back to clients or included in response bodies.\",\n    \"failureScenario\": \"When a client calls providerStatusHandler with a provider API key like 'sk-prod-abc123xyz', the response returns '{\\\"ok\\\": true, \\\"apiKey\\\": \\\"sk-prod-abc123xyz\\\"}', exposing the secret key in the response body. This credential is now visible in HTTP access logs, CDN caches, browser developer tools, and to any party that can intercept or view the HTTP response, enabling credential theft and unauthorized API access.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.321Z",
+  "elapsedMs": 19733.745922727274
+}

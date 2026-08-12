@@ -1,0 +1,8 @@
+{
+  "key": "8c018ce4c06098f155d58e722e2b64b3",
+  "file": "positive/unsafe-redirect/redirect-query-param.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"unsafe-redirect\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"medium\",\n    \"summary\": \"The redirect target after login is taken directly from the query parameter without validation, enabling phishing attacks.\",\n    \"rationale\": \"Line 12 passes `req.query.next` directly to the redirect function without any validation that the URL points to a safe domain or path. This is a post-login handler, making it particularly dangerous as authenticated users are redirected to attacker-controlled URLs.\",\n    \"failureScenario\": \"Attacker sends victim a link like `https://legitimate-site.com/login?next=https://evil.example/phishing`. Victim logs in successfully on the legitimate site, then is automatically redirected to the attacker's phishing page at evil.example, which appears legitimate since the redirect originated from the trusted domain after successful authentication.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.946Z",
+  "elapsedMs": 19861.581153018178
+}

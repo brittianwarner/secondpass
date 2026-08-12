@@ -1,0 +1,8 @@
+{
+  "key": "fd15085f4563de83851f479470cef1ba",
+  "file": "positive/unsafe-redirect/redirect-no-status-code.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"unsafe-redirect\",\n    \"lineNumbers\": [10],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"medium\",\n    \"summary\": \"User-controlled query parameter is used directly as redirect target without validation.\",\n    \"rationale\": \"Line 10 reads `url.searchParams.get(\\\"next\\\")` from the URL parameter and passes it directly to `redirect()` without validating that the target is a safe, internal path. Since the URL object is a function parameter, an attacker can control the `next` query parameter to redirect users to arbitrary external domains.\",\n    \"failureScenario\": \"An attacker sends a victim a link like `https://trusted-site.com/checkout-return?next=https://evil.com/phishing`. When the victim clicks it, handleCheckoutReturn is called with this URL, and the redirect function sends them to evil.com, enabling phishing attacks that appear to originate from the trusted domain.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.946Z",
+  "elapsedMs": 19861.581153018178
+}

@@ -1,0 +1,8 @@
+{
+  "key": "6039c18e623b9dc26de36e3b867ec7da",
+  "file": "positive/sql-injection/interpolated-where.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [10],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"User-controlled email parameter is directly interpolated into SQL query without parameterization or escaping.\",\n    \"rationale\": \"On line 10, the `email` parameter from the function signature is directly embedded into the SQL query using template literal interpolation (`${email}`). No parameterized queries, prepared statements, or escaping mechanisms are applied. The value flows unchecked from a string parameter into raw SQL construction.\",\n    \"failureScenario\": \"When a caller invokes `findUserByEmail(\\\"' OR '1'='1\\\")`, the query becomes `SELECT * FROM users WHERE email = '' OR '1'='1'`, which evaluates the OR condition as true and returns all rows in the users table instead of filtering by email. Similarly, an input like `'; DROP TABLE users; --` could execute destructive commands depending on database permissions.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.321Z",
+  "elapsedMs": 19733.745922727274
+}

@@ -1,0 +1,8 @@
+{
+  "key": "0de1930363e20d131d5b9ca6fd5cddbc",
+  "file": "positive/non-atomic-read-delete/balance-read-modify-write.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"non-atomic-read-delete\",\n    \"lineNumbers\": [12, 13],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Race condition allows concurrent debits to both read the same balance before either writes, leading to lost updates and incorrect account balances.\",\n    \"rationale\": \"Lines 12-13 implement a classic read-modify-write pattern without atomic protection: the balance is read via `ledger.get()`, then immediately written back with `ledger.set()` after subtraction. No locking, versioning, or compare-and-swap mechanism guards against interleaved execution. The file header confirms the vulnerability: 'two simultaneous withdrawals can both succeed from a balance that only covers one' because there is 'no guard against a concurrent debit landing between the read and the write.'\",\n    \"failureScenario\": \"Account starts with balance=100. Thread A calls debitAccount(id, 80) and reads balance=100. Thread B calls debitAccount(id, 80) and also reads balance=100 before A writes. Thread A writes 20, then B writes 20. Final balance is 20 instead of -60 (or one debit should have failed). Total withdrawn: 160; total debited: 80.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.324Z",
+  "elapsedMs": 19733.745922727274
+}

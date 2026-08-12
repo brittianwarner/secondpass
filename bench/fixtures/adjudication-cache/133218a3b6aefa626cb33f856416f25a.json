@@ -1,0 +1,8 @@
+{
+  "key": "133218a3b6aefa626cb33f856416f25a",
+  "file": "positive/secret-in-log/console-log-access-token.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"secret-in-log\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Access token is logged to console, exposing credentials in logs that are shipped to a log aggregator.\",\n    \"rationale\": \"Line 8 passes the `accessToken` parameter directly to `console.log()`. The function name `refreshAccessToken` and parameter name confirm this is a sensitive credential. The comments indicate stdout is shipped to a log aggregator, making the token accessible to anyone with log access.\",\n    \"failureScenario\": \"When refreshAccessToken is called with a valid OAuth or API access token, that token is printed to stdout and forwarded to the log aggregator. An attacker or insider with log access retrieves the plaintext token from the logs and uses it to authenticate as the victim until the token expires.\",\n    \"confidence\": 0.96\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.321Z",
+  "elapsedMs": 19733.745922727274
+}

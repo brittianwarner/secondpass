@@ -1,0 +1,8 @@
+{
+  "key": "32ed593ebff204399ca2265d9310bad5",
+  "file": "positive/jwt-handling/manual-split-payload.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"jwt-handling\",\n    \"lineNumbers\": [9],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"JWT payload is extracted and trusted without signature verification, allowing attackers to forge arbitrary claims.\",\n    \"rationale\": \"Line 9 manually splits the JWT token on dots and base64-decodes the payload segment using `atob(token.split('.')[1])`, then returns the parsed claims. The function performs no signature verification whatsoever—it never checks the third segment of the JWT or validates the token against a secret key. This means any attacker can craft a JWT with arbitrary claims and the application will trust it.\",\n    \"failureScenario\": \"An attacker crafts a JWT token with forged claims such as `eyJhbGciOiJub25lIn0.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbmlzdHJhdG9yIn0.` (no valid signature). When passed to `readTokenClaims`, the function extracts and returns `{sub: 'admin', role: 'administrator'}` without validating the signature, allowing the attacker to impersonate an admin user or escalate privileges.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.947Z",
+  "elapsedMs": 19861.581153018178
+}

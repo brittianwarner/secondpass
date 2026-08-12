@@ -1,0 +1,8 @@
+{
+  "key": "c860aaadf096f04ee3692f82ffe8b8bd",
+  "file": "negative/unsafe-redirect/module-constant-target.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"unsafe-redirect\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"The redirect target is a hardcoded module-level constant, not derived from user-controlled input.\",\n    \"rationale\": \"Line 8 defines INTERNAL_LOGOUT_PATH as the string literal '/auth/logged-out', which is a fixed constant. Line 11 uses this constant for the redirect via location.replace(). There is no code path where attacker-controlled data (query parameters, request data, or any external input) can influence the redirect destination. The value is determined entirely at compile time.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.322Z",
+  "elapsedMs": 19733.745922727274
+}

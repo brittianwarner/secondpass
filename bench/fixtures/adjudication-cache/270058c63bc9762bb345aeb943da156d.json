@@ -1,0 +1,8 @@
+{
+  "key": "270058c63bc9762bb345aeb943da156d",
+  "file": "positive/ssrf/fetch-request-url.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"ssrf\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"User-supplied URL is fetched without validation, allowing access to internal services and metadata endpoints.\",\n    \"rationale\": \"Line 11 extracts a URL from the request body, and line 12 passes it directly to fetch() with no host allowlist, protocol restrictions, or checks against internal/private IP ranges. The function acts as an open proxy to any destination the attacker specifies.\",\n    \"failureScenario\": \"Attacker sends {\\\"url\\\": \\\"http://169.254.169.254/latest/meta-data/iam/security-credentials/\\\"} to exfiltrate AWS instance credentials, or {\\\"url\\\": \\\"http://localhost:6379/\\\"} to probe internal Redis, or any internal-only hostname like http://admin-panel.internal/ to bypass network perimeter defenses.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.945Z",
+  "elapsedMs": 19861.581153018178
+}

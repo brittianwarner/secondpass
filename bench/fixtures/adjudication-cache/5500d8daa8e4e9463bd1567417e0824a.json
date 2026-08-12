@@ -1,0 +1,8 @@
+{
+  "key": "5500d8daa8e4e9463bd1567417e0824a",
+  "file": "positive/insecure-crypto/md5-password-hash.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"insecure-crypto\",\n    \"lineNumbers\": [10],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Password hashed with unsalted MD5, which is cryptographically broken and vulnerable to rainbow table attacks.\",\n    \"rationale\": \"Line 10 uses createHash('md5') to hash a password parameter with no salt. MD5 is extremely fast (enabling brute-force), has known collisions, and without salting is trivially reversed via precomputed rainbow tables. Modern password hashing requires slow algorithms like bcrypt, scrypt, or Argon2 with per-password salts.\",\n    \"failureScenario\": \"An attacker gains read access to the database storing these password hashes (via SQL injection, backup theft, or insider threat). They use publicly available MD5 rainbow tables or GPU-accelerated cracking tools to reverse common passwords instantly and crack even complex passwords within hours, compromising user accounts.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.947Z",
+  "elapsedMs": 19861.581153018178
+}

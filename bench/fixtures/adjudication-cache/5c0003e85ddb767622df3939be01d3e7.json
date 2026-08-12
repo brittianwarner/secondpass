@@ -1,0 +1,8 @@
+{
+  "key": "5c0003e85ddb767622df3939be01d3e7",
+  "file": "positive/non-atomic-read-delete/balance-read-modify-write.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"non-atomic-read-delete\",\n    \"lineNumbers\": [12, 13],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Read-modify-write race condition on account balance allows concurrent debits to corrupt the balance.\",\n    \"rationale\": \"Lines 12-13 perform a non-atomic read-modify-write operation: the balance is read with `ledger.get()`, then a new value is written with `ledger.set()`. Between these two operations, another concurrent debit can read the same original balance, causing both operations to use stale data and resulting in only one debit being reflected in the final balance.\",\n    \"failureScenario\": \"Account has balance of $100. Two concurrent calls `debitAccount(id, 80)` execute: both read balance=100 at line 12, both compute 100-80=20, both write 20 at line 13. Final balance is $20 instead of the correct $-60, allowing $80 to be debited when only $20 was available after the first debit.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

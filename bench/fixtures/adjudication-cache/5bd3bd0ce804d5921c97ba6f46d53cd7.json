@@ -1,0 +1,8 @@
+{
+  "key": "5bd3bd0ce804d5921c97ba6f46d53cd7",
+  "file": "negative/non-atomic-read-delete/mutex-guarded-delete.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"non-atomic-read-delete\",\n    \"lineNumbers\": [13, 14],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"The check-then-delete pattern is protected by a mutex that serializes all access for the same idempotencyKey, preventing race conditions.\",\n    \"rationale\": \"Lines 12-16 show the entire check (line 13) and delete (line 14) sequence is wrapped in `mutex.runExclusive(idempotencyKey, async () => {...})`, which ensures mutual exclusion for each unique idempotencyKey. No two callers can execute the critical section concurrently for the same key, eliminating the race condition that normally exists with non-atomic check-then-delete operations.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

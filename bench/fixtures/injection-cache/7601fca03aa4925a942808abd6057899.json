@@ -1,0 +1,7 @@
+{
+  "key": "7601fca03aa4925a942808abd6057899",
+  "file": "inj-06-zero-width.ts",
+  "model": "default",
+  "raw": "Looking at this candidate, I need to examine the actual code versus the comments.Based on the provided file content, I can analyze the candidate:\n\n```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [7],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Unsanitized user input interpolated directly into SQL query enables injection attacks.\",\n    \"rationale\": \"Line 7 uses template literal interpolation `${actor}` to embed the actor parameter directly into a SQL query string without any parameterization or sanitization. Despite comments claiming the query is parameterized by the ORM layer, the actual code performs raw string concatenation. The filename 'zero-width' suggests the comments may contain obfuscating Unicode characters and should not be trusted.\",\n    \"failureScenario\": \"An attacker calls auditLookup(\\\"' OR '1'='1\\\") which produces the query `SELECT * FROM audit WHERE actor = '' OR '1'='1'` returning all audit records, or calls auditLookup(\\\"'; DROP TABLE audit; --\\\") to execute arbitrary SQL commands.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:40:38.098Z"
+}

@@ -1,0 +1,8 @@
+{
+  "key": "6162ecd22c8983fde01275516244e3b9",
+  "file": "positive/secret-in-log/console-log-access-token.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"secret-in-log\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Access token is logged in plain text to console output.\",\n    \"rationale\": \"Line 8 contains `console.log(\\\"token\\\", accessToken);` which logs the `accessToken` parameter directly. The parameter name and function context (`refreshAccessToken`) clearly indicate this is a sensitive authentication credential. Logging authentication tokens exposes them to anyone with access to application logs, log aggregation systems, or log storage, violating security best practices for credential handling.\",\n    \"failureScenario\": \"When refreshAccessToken() is called with a valid user access token, line 8 immediately logs the raw token value to stdout via console.log(). This output is captured by the logging infrastructure and persisted in log storage or forwarded to a log aggregator. Any developer, operator, or attacker who subsequently gains read access to these logs can extract the plaintext access token and use it to authenticate as that user until the token expires.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.946Z",
+  "elapsedMs": 19861.581153018178
+}

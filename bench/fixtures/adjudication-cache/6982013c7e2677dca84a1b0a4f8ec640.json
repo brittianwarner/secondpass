@@ -1,0 +1,8 @@
+{
+  "key": "6982013c7e2677dca84a1b0a4f8ec640",
+  "file": "positive/cors-wildcard/headers-object-wildcard.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"cors-wildcard\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Wildcard CORS origin allows any website to make cross-origin requests to this API endpoint.\",\n    \"rationale\": \"Line 8 sets 'Access-Control-Allow-Origin: \\\"*\\\"' in an exported headers object named 'publicApiHeaders'. This static headers object is defined at module scope and intended to be reused across responses. The wildcard origin permits any external website to read API responses via JavaScript, which becomes critical if the API handles authenticated requests or sensitive data. The static nature prevents request-specific origin validation, making it unsuitable for any endpoints requiring access control.\",\n    \"failureScenario\": \"An attacker hosts malicious JavaScript on evil.com that makes fetch() requests to the API using these headers. If the API returns any sensitive information (user data, internal details, or resources protected by session cookies/tokens in other headers), the attacker's JavaScript can read the response and exfiltrate the data. Even without credentials, if the API exposes any non-public information based on network location or other implicit authorization, the wildcard allows unauthorized cross-origin access.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.947Z",
+  "elapsedMs": 19861.581153018178
+}

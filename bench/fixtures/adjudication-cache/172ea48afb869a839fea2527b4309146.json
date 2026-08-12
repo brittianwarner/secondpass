@@ -1,0 +1,8 @@
+{
+  "key": "172ea48afb869a839fea2527b4309146",
+  "file": "positive/test-header-bypass/allow-insecure-tls-flag.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"test-header-bypass\",\n    \"lineNumbers\": [9],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Environment variable ALLOW_INSECURE_TLS disables TLS certificate verification when set to '1', exposing the application to MITM attacks if misconfigured in production.\",\n    \"rationale\": \"Line 9 reads process.env.ALLOW_INSECURE_TLS at runtime to control whether TLS verification occurs (via shouldVerifyTls() returning false when the flag is set). This runtime control-weakening flag bypasses a critical security mechanism and is vulnerable to accidental production misconfiguration through deployment pipelines, container images, or environment files.\",\n    \"failureScenario\": \"A developer sets ALLOW_INSECURE_TLS=1 in their local .env file for testing against a service with a self-signed certificate. This .env file or the environment variable configuration is accidentally committed or promoted to production deployment (e.g., copied into a Kubernetes ConfigMap or Docker Compose file). The application now accepts any TLS certificate including attacker-controlled ones, allowing a network-level attacker to perform MITM attacks and intercept or modify all TLS traffic.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

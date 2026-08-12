@@ -1,0 +1,8 @@
+{
+  "key": "db7d64473a675edccb03f4a41dc17cb1",
+  "file": "negative/rce/allowlisted-branch-name.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"rce\",\n    \"lineNumbers\": [16],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"The branch name is validated against a fixed allowlist before being used in the shell command, preventing command injection.\",\n    \"rationale\": \"Lines 13-14 implement an allowlist check that ensures only 'main' or 'staging' can reach the execSync call. The ALLOWED_BRANCHES Set (line 10) contains only these two hardcoded, safe values. The Set.has() check on line 13 uses strict equality, and if the branch parameter doesn't match exactly, an error is thrown (line 14) before the shell command executes. Since only non-malicious strings 'main' and 'staging' can pass this validation, command injection is not possible.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.324Z",
+  "elapsedMs": 19733.745922727274
+}

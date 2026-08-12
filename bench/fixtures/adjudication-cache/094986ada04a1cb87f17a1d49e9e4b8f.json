@@ -1,0 +1,8 @@
+{
+  "key": "094986ada04a1cb87f17a1d49e9e4b8f",
+  "file": "positive/ssrf/got-request-body-url.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"ssrf\",\n    \"lineNumbers\": [15],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Unvalidated user-supplied URL is used directly in an HTTP request, enabling SSRF attacks against internal resources and cloud metadata services.\",\n    \"rationale\": \"Line 15 makes an HTTP request using `got(body.imageUrl, ...)` where `body.imageUrl` comes directly from the request body parameter without any validation, sanitization, or allowlist. The URL is user-controlled and passed straight to the HTTP client, allowing attackers to specify arbitrary destinations including internal services, localhost, or cloud metadata endpoints.\",\n    \"failureScenario\": \"An attacker calls thumbnailHandler with body.imageUrl set to 'http://169.254.169.254/latest/meta-data/iam/security-credentials/' (AWS metadata endpoint) or 'http://localhost:6379' (internal Redis). The server makes the request, potentially exposing cloud credentials or enabling internal port scanning and service access that should not be reachable from the internet.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.321Z",
+  "elapsedMs": 19733.745922727274
+}

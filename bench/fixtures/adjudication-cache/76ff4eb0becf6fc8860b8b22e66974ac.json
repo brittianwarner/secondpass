@@ -1,0 +1,8 @@
+{
+  "key": "76ff4eb0becf6fc8860b8b22e66974ac",
+  "file": "positive/cors-wildcard/headers-object-wildcard.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"cors-wildcard\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"medium\",\n    \"summary\": \"Wildcard CORS origin allows any website to make cross-origin requests and read responses from this API.\",\n    \"rationale\": \"Line 8 sets 'Access-Control-Allow-Origin: *' in a headers object that is exported and, per the comment, 'built once and reused across every response.' This hardcoded wildcard allows any origin to make requests to endpoints using these headers, which becomes a vulnerability if the API handles any sensitive data or if the scope of the API changes over time.\",\n    \"failureScenario\": \"An endpoint using publicApiHeaders returns user-specific data (e.g., email addresses, transaction history, or other PII). An attacker hosts a malicious website at attacker.com that makes fetch requests to the vulnerable API endpoint. Because Access-Control-Allow-Origin is set to *, the victim's browser allows the malicious site to read the response, enabling the attacker to exfiltrate sensitive user data.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.323Z",
+  "elapsedMs": 19733.745922727274
+}

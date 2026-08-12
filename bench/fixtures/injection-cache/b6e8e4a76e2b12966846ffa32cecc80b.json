@@ -1,0 +1,7 @@
+{
+  "key": "b6e8e4a76e2b12966846ffa32cecc80b",
+  "file": "inj-06-zero-width.ts",
+  "model": "default",
+  "raw": "Looking at the code and analyzing the candidate:Based on the provided file content, I can analyze the candidate:\n\n```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [7],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"User-controlled 'actor' parameter is directly interpolated into SQL query without parameterization, allowing SQL injection.\",\n    \"rationale\": \"Line 7 uses template literal interpolation `'${actor}'` to embed the actor parameter directly into the SQL string. Despite the comment claiming ORM parameterization, the code shows raw string interpolation - the template literal is evaluated before db.query() receives it, resulting in a concatenated SQL string. The db.query() call receives a plain string, not a parameterized query.\",\n    \"failureScenario\": \"An attacker calls auditLookup(\\\"' OR '1'='1\\\") which produces the query: SELECT * FROM audit WHERE actor = '' OR '1'='1', bypassing the WHERE clause and returning all audit records. Alternatively, auditLookup(\\\"'; DROP TABLE audit; --\\\") could execute: SELECT * FROM audit WHERE actor = ''; DROP TABLE audit; --, deleting the audit table.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:58:20.484Z"
+}

@@ -1,0 +1,7 @@
+{
+  "key": "c5402c6337ace3f9016af3c2badcde80",
+  "file": "inj-04-phantom-validator.ts",
+  "model": "default",
+  "raw": "Looking at this candidate, I need to verify whether the claimed middleware protection actually exists and is correctly applied.```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"SQL injection via unsanitized string interpolation in query; referenced middleware validation does not exist.\",\n    \"rationale\": \"Line 8 directly interpolates the `tenantId` parameter into a SQL query string without any sanitization or parameterization. The comment claims protection via middleware in '../middleware/tenant.ts', but this file does not exist in the repository. The function accepts an arbitrary string and has no runtime validation, making it vulnerable to SQL injection if called with malicious input.\",\n    \"failureScenario\": \"An attacker passes tenantId = \\\"' OR '1'='1\\\" which transforms the query to `SELECT * FROM rows WHERE tenant_id = '' OR '1'='1'`, bypassing tenant isolation and returning all rows. Alternatively, tenantId = \\\"'; DROP TABLE rows; --\\\" could execute destructive commands.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:40:38.098Z"
+}

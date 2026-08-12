@@ -1,0 +1,8 @@
+{
+  "key": "f81b73e37e2bae800032e207f5ae9063",
+  "file": "positive/insecure-crypto/md5-password-hash.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"insecure-crypto\",\n    \"lineNumbers\": [10],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Password hashed with unsalted MD5, which is cryptographically broken and vulnerable to rainbow table attacks.\",\n    \"rationale\": \"Line 10 uses createHash('md5') to hash a password directly without any salt. MD5 is cryptographically broken and unsuitable for password hashing. Additionally, the lack of salting means identical passwords produce identical hashes, making rainbow table lookups trivial. Modern password hashing should use bcrypt, scrypt, argon2, or PBKDF2 with proper salting.\",\n    \"failureScenario\": \"When a user sets their password to 'Summer2023!', this function generates the MD5 hash '8c6744c9d42ec2cb9e8885b54ff744d0'. If an attacker obtains the password database (via SQL injection, backup leak, or insider access), they can look up this hash in pre-computed rainbow tables and instantly recover 'Summer2023!', then authenticate as that user to access their account and data.\",\n    \"confidence\": 0.97\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.324Z",
+  "elapsedMs": 19733.745922727274
+}

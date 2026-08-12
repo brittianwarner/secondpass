@@ -1,0 +1,628 @@
+{
+  "cases": [
+    {
+      "file": "positive/auth-bypass/bypass-auth-identifier.ts",
+      "expect": "hit",
+      "slug": "auth-bypass",
+      "line": 11,
+      "note": "bypassAuthForWebhook() is called unconditionally with no internal-caller verification"
+    },
+    {
+      "file": "positive/auth-bypass/client-supplied-admin-flag.ts",
+      "expect": "hit",
+      "slug": "auth-bypass",
+      "line": 18,
+      "note": "handler grants admin based on isAdmin read off the request body, not the session"
+    },
+    {
+      "file": "positive/auth-bypass/env-gated-admin-route.ts",
+      "expect": "hit",
+      "slug": "auth-bypass",
+      "line": 12,
+      "note": "NODE_ENV != production short-circuits straight to next(), skipping requireAuth entirely"
+    },
+    {
+      "file": "positive/auth-bypass/loose-equality-authenticated.ts",
+      "expect": "hit",
+      "slug": "auth-bypass",
+      "line": 16,
+      "note": "session.isAuthenticated is compared with == instead of ===, tolerating coercion"
+    },
+    {
+      "file": "negative/auth-bypass/comment-mentions-bypass.ts",
+      "expect": "miss",
+      "slug": "auth-bypass",
+      "note": "comment prose says 'bypass auth' as two words; requireAuth() runs unconditionally below it"
+    },
+    {
+      "file": "negative/auth-bypass/dev-diagnostics-gated.ts",
+      "expect": "miss",
+      "slug": "auth-bypass",
+      "note": "NODE_ENV check only enables extra logging; requireAuth() still runs unconditionally after it"
+    },
+    {
+      "file": "negative/auth-bypass/role-filter-query-param.ts",
+      "expect": "miss",
+      "slug": "auth-bypass",
+      "note": "role is read off the query string only to filter an already-authorized list, not to gate access"
+    },
+    {
+      "file": "negative/auth-bypass/strict-equality-authenticated.ts",
+      "expect": "miss",
+      "slug": "auth-bypass",
+      "note": "same shape as the loose-equality positive, but with === \u2014 no coercion possible"
+    },
+    {
+      "file": "positive/sql-injection/concatenated-delete.ts",
+      "expect": "hit",
+      "slug": "sql-injection",
+      "line": 11,
+      "note": "session token concatenated by hand into a DELETE statement"
+    },
+    {
+      "file": "positive/sql-injection/interpolated-order-by.ts",
+      "expect": "hit",
+      "slug": "sql-injection",
+      "line": 11,
+      "note": "caller-supplied sort column interpolated into ORDER BY"
+    },
+    {
+      "file": "positive/sql-injection/interpolated-table-name.ts",
+      "expect": "hit",
+      "slug": "sql-injection",
+      "line": 11,
+      "note": "caller-supplied table name interpolated into the FROM clause, an identifier position bound params can't cover"
+    },
+    {
+      "file": "positive/sql-injection/interpolated-where.ts",
+      "expect": "hit",
+      "slug": "sql-injection",
+      "line": 10,
+      "note": "user-controlled email interpolated into a template-literal WHERE clause"
+    },
+    {
+      "file": "negative/sql-injection/allowlisted-table-name.ts",
+      "expect": "miss",
+      "slug": "sql-injection",
+      "note": "same interpolated-table-name shape, but the table is checked against a fixed allowlist first"
+    },
+    {
+      "file": "negative/sql-injection/comment-shows-vulnerable-example.ts",
+      "expect": "miss",
+      "slug": "sql-injection",
+      "note": "comment quotes the vulnerable template literal as a warning; the real query below is parameterized"
+    },
+    {
+      "file": "negative/sql-injection/orm-query-builder.ts",
+      "expect": "miss",
+      "slug": "sql-injection",
+      "note": "Drizzle-style query builder; no raw SQL string exists anywhere in the file"
+    },
+    {
+      "file": "negative/sql-injection/parameterized-query.ts",
+      "expect": "miss",
+      "slug": "sql-injection",
+      "note": "bound parameter (?) carries the value; it never becomes part of the SQL text"
+    },
+    {
+      "file": "positive/ssrf/axios-interpolated-user-path.ts",
+      "expect": "hit",
+      "slug": "ssrf",
+      "line": 11,
+      "note": "outbound request path segment taken directly from the query string and interpolated into the URL"
+    },
+    {
+      "file": "positive/ssrf/fetch-request-url.ts",
+      "expect": "hit",
+      "slug": "ssrf",
+      "line": 12,
+      "note": "fetch() dereferences a URL taken directly from the request body, no host check"
+    },
+    {
+      "file": "positive/ssrf/got-request-body-url.ts",
+      "expect": "hit",
+      "slug": "ssrf",
+      "line": 15,
+      "note": "thumbnailer downloads whatever image URL the client supplies in the request body"
+    },
+    {
+      "file": "positive/ssrf/new-url-from-query.ts",
+      "expect": "hit",
+      "slug": "ssrf",
+      "line": 10,
+      "note": "callback URL built from the query string and dereferenced with no allowlist"
+    },
+    {
+      "file": "negative/ssrf/comment-shows-raw-fetch.ts",
+      "expect": "miss",
+      "slug": "ssrf",
+      "note": "comment quotes the vulnerable call as a warning; the real code resolves against a host allowlist first"
+    },
+    {
+      "file": "negative/ssrf/env-base-url-interpolation.ts",
+      "expect": "miss",
+      "slug": "ssrf",
+      "note": "interpolated segment is a deploy-time constant base URL, never caller input"
+    },
+    {
+      "file": "negative/ssrf/hardcoded-third-party-url.ts",
+      "expect": "miss",
+      "slug": "ssrf",
+      "note": "fully literal, hardcoded third-party URL \u2014 no caller input reaches the target"
+    },
+    {
+      "file": "negative/ssrf/internal-http-client-wrapper.ts",
+      "expect": "miss",
+      "slug": "ssrf",
+      "note": "different HTTP client (not fetch/axios/got), and the URL is resolved through an allowlist first"
+    },
+    {
+      "file": "positive/secret-in-log/apikey-object-logged.ts",
+      "expect": "hit",
+      "slug": "secret-in-log",
+      "line": 11,
+      "note": "provider apiKey passed directly into a structured log call"
+    },
+    {
+      "file": "positive/secret-in-log/console-log-access-token.ts",
+      "expect": "hit",
+      "slug": "secret-in-log",
+      "line": 8,
+      "note": "raw accessToken printed via console.log, left over from debugging"
+    },
+    {
+      "file": "positive/secret-in-log/secret-in-response-body.ts",
+      "expect": "hit",
+      "slug": "secret-in-log",
+      "line": 12,
+      "note": "provider key echoed back in the HTTP response body via res.json"
+    },
+    {
+      "file": "positive/secret-in-log/session-object-logged-wholesale.ts",
+      "expect": "hit",
+      "slug": "secret-in-log",
+      "line": 8,
+      "note": "entire session object (including its bearer token) logged wholesale"
+    },
+    {
+      "file": "negative/secret-in-log/boolean-presence-flag.ts",
+      "expect": "miss",
+      "slug": "secret-in-log",
+      "note": "identifier apiKeyPresent (a boolean), not the tracked word apiKey, reaches the logger"
+    },
+    {
+      "file": "negative/secret-in-log/comment-with-call-syntax.ts",
+      "expect": "miss",
+      "slug": "secret-in-log",
+      "note": "comment shows the vulnerable call syntax as a TODO; the real call logs only a boolean presence flag"
+    },
+    {
+      "file": "negative/secret-in-log/error-message-mentions-apikey.ts",
+      "expect": "miss",
+      "slug": "secret-in-log",
+      "note": "the word apiKey appears inside a human-readable error message string, never as a logged value"
+    },
+    {
+      "file": "negative/secret-in-log/redact-wrapper-renamed-fields.ts",
+      "expect": "miss",
+      "slug": "secret-in-log",
+      "note": "the credential is passed through a redaction helper that returns renamed, non-secret-shaped fields"
+    },
+    {
+      "file": "positive/xss/dangerously-set-inner-html.ts",
+      "expect": "hit",
+      "slug": "xss",
+      "line": 11,
+      "note": "raw HTML from an upstream CMS rendered via dangerouslySetInnerHTML with no sanitizer pass"
+    },
+    {
+      "file": "positive/xss/inner-html-user-comment.ts",
+      "expect": "hit",
+      "slug": "xss",
+      "line": 9,
+      "note": "user-authored comment written straight into innerHTML with no sanitizer"
+    },
+    {
+      "file": "positive/xss/insert-adjacent-html-fragment.ts",
+      "expect": "hit",
+      "slug": "xss",
+      "line": 8,
+      "note": "untrusted search-result fragment inserted via insertAdjacentHTML with no escaping"
+    },
+    {
+      "file": "positive/xss/svelte-html-expression.svelte",
+      "expect": "hit",
+      "slug": "xss",
+      "line": 13,
+      "note": "server-rendered markdown injected via {@html} instead of being sanitized"
+    },
+    {
+      "file": "negative/xss/comment-shows-vulnerable-shape.ts",
+      "expect": "miss",
+      "slug": "xss",
+      "note": "comment quotes the vulnerable shape as a warning; the real assignment uses textContent"
+    },
+    {
+      "file": "negative/xss/dompurify-sanitized.ts",
+      "expect": "miss",
+      "slug": "xss",
+      "note": "the value is sanitized through DOMPurify.sanitize() before reaching innerHTML"
+    },
+    {
+      "file": "negative/xss/svelte-html-literal-string.svelte",
+      "expect": "miss",
+      "slug": "xss",
+      "note": "{@html} is fed a plain string literal, nothing dynamic or user-controlled"
+    },
+    {
+      "file": "negative/xss/text-content-assignment.ts",
+      "expect": "miss",
+      "slug": "xss",
+      "note": "textContent, not innerHTML \u2014 the string is never parsed as markup"
+    },
+    {
+      "file": "positive/unsafe-redirect/location-header-from-body.ts",
+      "expect": "hit",
+      "slug": "unsafe-redirect",
+      "line": 13,
+      "note": "Location header set directly from a request-body field"
+    },
+    {
+      "file": "positive/unsafe-redirect/location-href-from-query.ts",
+      "expect": "hit",
+      "slug": "unsafe-redirect",
+      "line": 9,
+      "note": "'returnTo' query param assigned directly to location.href"
+    },
+    {
+      "file": "positive/unsafe-redirect/redirect-no-status-code.ts",
+      "expect": "hit",
+      "slug": "unsafe-redirect",
+      "line": 10,
+      "note": "url.searchParams dereferenced straight into the redirect target, no status-code arg"
+    },
+    {
+      "file": "positive/unsafe-redirect/redirect-query-param.ts",
+      "expect": "hit",
+      "slug": "unsafe-redirect",
+      "line": 12,
+      "note": "post-login redirect target read directly from the query string"
+    },
+    {
+      "file": "negative/unsafe-redirect/allowlist-validated-target.ts",
+      "expect": "miss",
+      "slug": "unsafe-redirect",
+      "note": "redirect target is checked against a fixed allowlist before it is ever used"
+    },
+    {
+      "file": "negative/unsafe-redirect/comment-shows-vulnerable-call.ts",
+      "expect": "miss",
+      "slug": "unsafe-redirect",
+      "note": "comment quotes the vulnerable call as a warning; the real redirect target is a hardcoded literal path"
+    },
+    {
+      "file": "negative/unsafe-redirect/module-constant-target.ts",
+      "expect": "miss",
+      "slug": "unsafe-redirect",
+      "note": "navigation target is a module-level constant, never derived from a request"
+    },
+    {
+      "file": "negative/unsafe-redirect/relative-path-literal.ts",
+      "expect": "miss",
+      "slug": "unsafe-redirect",
+      "note": "hardcoded same-origin relative path literal, no caller input reaches the target"
+    },
+    {
+      "file": "positive/cors-wildcard/cors-middleware-origin-true.ts",
+      "expect": "hit",
+      "slug": "cors-wildcard",
+      "line": 12,
+      "note": "CORS middleware configured with origin: true, reflecting any origin. LABEL CORRECTED from line 4 to line 12: line 4 is the prose comment that merely quotes `origin: true`, line 12 is the actual middleware config. The original label was satisfiable only by a scanner with no comment awareness, so it scored a comment match as a true positive."
+    },
+    {
+      "file": "positive/cors-wildcard/headers-object-wildcard.ts",
+      "expect": "hit",
+      "slug": "cors-wildcard",
+      "line": 8,
+      "note": "module-level headers object bakes in a wildcard Access-Control-Allow-Origin"
+    },
+    {
+      "file": "positive/cors-wildcard/reflected-origin-header.ts",
+      "expect": "hit",
+      "slug": "cors-wildcard",
+      "line": 11,
+      "note": "caller's Origin header reflected back unconditionally, no allowlist check"
+    },
+    {
+      "file": "positive/cors-wildcard/wildcard-header-literal.ts",
+      "expect": "hit",
+      "slug": "cors-wildcard",
+      "line": 11,
+      "note": "Access-Control-Allow-Origin set to '*' alongside Allow-Credentials: true"
+    },
+    {
+      "file": "negative/cors-wildcard/allowlist-then-reflect.ts",
+      "expect": "miss",
+      "slug": "cors-wildcard",
+      "note": "Origin is checked against a fixed allowlist before the validated local variable is ever echoed back"
+    },
+    {
+      "file": "negative/cors-wildcard/comment-mentions-wildcard.ts",
+      "expect": "miss",
+      "slug": "cors-wildcard",
+      "note": "prose warning comment with no quoted header name and no origin: config syntax"
+    },
+    {
+      "file": "negative/cors-wildcard/hardcoded-specific-origin.ts",
+      "expect": "miss",
+      "slug": "cors-wildcard",
+      "note": "a single, hardcoded, specific origin \u2014 not a wildcard, not derived from the caller"
+    },
+    {
+      "file": "negative/cors-wildcard/origin-false-restrictive.ts",
+      "expect": "miss",
+      "slug": "cors-wildcard",
+      "note": "CORS explicitly disabled (origin: false), not opened up"
+    },
+    {
+      "file": "positive/jwt-handling/algorithm-none-accepted.ts",
+      "expect": "hit",
+      "slug": "jwt-handling",
+      "line": 11,
+      "note": "verifier accepts the 'none' algorithm \u2014 classic alg=none forgery"
+    },
+    {
+      "file": "positive/jwt-handling/decode-without-verify.ts",
+      "expect": "hit",
+      "slug": "jwt-handling",
+      "line": 11,
+      "note": "jwt.decode() trusts the payload with no signature check at all"
+    },
+    {
+      "file": "positive/jwt-handling/expiration-ignored.ts",
+      "expect": "hit",
+      "slug": "jwt-handling",
+      "line": 10,
+      "note": "ignoreExpiration: true means a stolen token never expires"
+    },
+    {
+      "file": "positive/jwt-handling/manual-split-payload.ts",
+      "expect": "hit",
+      "slug": "jwt-handling",
+      "line": 9,
+      "note": "payload pulled out by hand-splitting the token on '.', no signature check anywhere"
+    },
+    {
+      "file": "negative/jwt-handling/comment-shows-vulnerable-call.ts",
+      "expect": "miss",
+      "slug": "jwt-handling",
+      "note": "comment quotes the vulnerable decode() call as a warning; the real code calls verify() with a strong algorithm"
+    },
+    {
+      "file": "negative/jwt-handling/decode-after-verify.ts",
+      "expect": "miss",
+      "slug": "jwt-handling",
+      "note": "decode() is called only after verify() already ran and would have thrown on a bad signature"
+    },
+    {
+      "file": "negative/jwt-handling/jose-strong-algorithm.ts",
+      "expect": "miss",
+      "slug": "jwt-handling",
+      "note": "jose's jwtVerify with a strong asymmetric algorithm (EdDSA) \u2014 real signature check"
+    },
+    {
+      "file": "negative/jwt-handling/strong-config-explicit-expiration.ts",
+      "expect": "miss",
+      "slug": "jwt-handling",
+      "note": "RS256 (not none/HS256) and ignoreExpiration explicitly false"
+    },
+    {
+      "file": "positive/insecure-crypto/des-cipher.ts",
+      "expect": "hit",
+      "slug": "insecure-crypto",
+      "line": 11,
+      "note": "triple-DES (des-ede3-cbc), a broken/deprecated cipher"
+    },
+    {
+      "file": "positive/insecure-crypto/math-random-secret.ts",
+      "expect": "hit",
+      "slug": "insecure-crypto",
+      "line": 8,
+      "note": "webhook signing secret generated from Math.random(), not a CSPRNG"
+    },
+    {
+      "file": "positive/insecure-crypto/md5-password-hash.ts",
+      "expect": "hit",
+      "slug": "insecure-crypto",
+      "line": 10,
+      "note": "passwords hashed with unsalted MD5"
+    },
+    {
+      "file": "positive/insecure-crypto/timing-unsafe-signature-compare.ts",
+      "expect": "hit",
+      "slug": "insecure-crypto",
+      "line": 9,
+      "note": "webhook signature compared with === instead of a constant-time compare"
+    },
+    {
+      "file": "negative/insecure-crypto/comment-shows-vulnerable-compare.ts",
+      "expect": "miss",
+      "slug": "insecure-crypto",
+      "note": "comment quotes the vulnerable comparison as a warning; the real check uses timingSafeEqual"
+    },
+    {
+      "file": "negative/insecure-crypto/non-secret-identity-compare.ts",
+      "expect": "miss",
+      "slug": "insecure-crypto",
+      "note": "same === shape, but neither identifier names a secret (userId, not a token/signature)"
+    },
+    {
+      "file": "negative/insecure-crypto/sha256-strong-hash.ts",
+      "expect": "miss",
+      "slug": "insecure-crypto",
+      "note": "SHA-256, not MD5/SHA-1"
+    },
+    {
+      "file": "negative/insecure-crypto/timing-safe-equal.ts",
+      "expect": "miss",
+      "slug": "insecure-crypto",
+      "note": "genuine constant-time comparison via crypto.timingSafeEqual, no ==/=== on the secret"
+    },
+    {
+      "file": "positive/rce/bun-shell-interpolated-path.ts",
+      "expect": "hit",
+      "slug": "rce",
+      "line": 11,
+      "note": "caller-controlled directory name interpolated into a Bun shell template ($`rm -rf ${targetDir}`)"
+    },
+    {
+      "file": "positive/rce/eval-user-expression.ts",
+      "expect": "hit",
+      "slug": "rce",
+      "line": 8,
+      "note": "a spreadsheet 'formula' field is evaluated with eval()"
+    },
+    {
+      "file": "positive/rce/exec-non-literal-command.ts",
+      "expect": "hit",
+      "slug": "rce",
+      "line": 11,
+      "note": "the entire command string is caller-supplied and passed to exec() as-is"
+    },
+    {
+      "file": "positive/rce/exec-sync-interpolated-branch.ts",
+      "expect": "hit",
+      "slug": "rce",
+      "line": 11,
+      "note": "branch name from the request interpolated straight into an execSync shell command"
+    },
+    {
+      "file": "negative/rce/allowlisted-branch-name.ts",
+      "expect": "miss",
+      "slug": "rce",
+      "note": "same interpolated-branch shape, but the branch is checked against a fixed allowlist first"
+    },
+    {
+      "file": "negative/rce/comment-shows-vulnerable-eval.ts",
+      "expect": "miss",
+      "slug": "rce",
+      "note": "comment quotes the vulnerable eval() call as a warning; the real code uses JSON.parse"
+    },
+    {
+      "file": "negative/rce/evaluate-formula-library.ts",
+      "expect": "miss",
+      "slug": "rce",
+      "note": "a sandboxed expression-parser's evaluate(), not the eval() global \u2014 same shape, different capability"
+    },
+    {
+      "file": "negative/rce/hardcoded-shell-command.ts",
+      "expect": "miss",
+      "slug": "rce",
+      "note": "fully literal, hardcoded git command with no interpolation and no caller input"
+    },
+    {
+      "file": "positive/non-atomic-read-delete/balance-read-modify-write.ts",
+      "expect": "hit",
+      "slug": "non-atomic-read-delete",
+      "line": 12,
+      "note": "balance read, then written back minus the debit, with no guard against a concurrent debit"
+    },
+    {
+      "file": "positive/non-atomic-read-delete/doc-read-then-update.ts",
+      "expect": "hit",
+      "slug": "non-atomic-read-delete",
+      "line": 12,
+      "note": "document read, mutated in memory, and written back with no optimistic-concurrency check"
+    },
+    {
+      "file": "positive/non-atomic-read-delete/idempotency-check-then-delete.ts",
+      "expect": "hit",
+      "slug": "non-atomic-read-delete",
+      "line": 11,
+      "note": "await cache.has() then a separate await cache.delete() \u2014 two concurrent callers can both pass the check"
+    },
+    {
+      "file": "positive/non-atomic-read-delete/rate-limit-check-then-consume.ts",
+      "expect": "hit",
+      "slug": "non-atomic-read-delete",
+      "line": 11,
+      "note": "rate limiter's exists() check and consume() step are separate awaited calls"
+    },
+    {
+      "file": "negative/non-atomic-read-delete/comment-shows-vulnerable-shape.ts",
+      "expect": "miss",
+      "slug": "non-atomic-read-delete",
+      "note": "comment quotes the vulnerable check-then-delete shape as a warning; the real code uses an atomic deleteIfExists"
+    },
+    {
+      "file": "negative/non-atomic-read-delete/compare-and-set-guard.ts",
+      "expect": "miss",
+      "slug": "non-atomic-read-delete",
+      "note": "inverted set-if-absent inside a transaction \u2014 the actual fix for the idempotency race"
+    },
+    {
+      "file": "negative/non-atomic-read-delete/mutex-guarded-delete.ts",
+      "expect": "miss",
+      "slug": "non-atomic-read-delete",
+      "note": "the check-then-delete is wrapped in a per-key mutex that serializes every caller"
+    },
+    {
+      "file": "negative/non-atomic-read-delete/read-only-no-write.ts",
+      "expect": "miss",
+      "slug": "non-atomic-read-delete",
+      "note": "a plain read with a fallback default; nothing is deleted or written back afterward"
+    },
+    {
+      "file": "positive/test-header-bypass/allow-insecure-tls-flag.ts",
+      "expect": "hit",
+      "slug": "test-header-bypass",
+      "line": 9,
+      "note": "ALLOW_INSECURE_TLS env flag read at runtime to skip TLS verification"
+    },
+    {
+      "file": "positive/test-header-bypass/disable-auth-env-flag.ts",
+      "expect": "hit",
+      "slug": "test-header-bypass",
+      "line": 11,
+      "note": "DISABLE_AUTH_CHECK env var turns off the auth check for the whole service"
+    },
+    {
+      "file": "positive/test-header-bypass/x-debug-override-skips-limit.ts",
+      "expect": "hit",
+      "slug": "test-header-bypass",
+      "line": 10,
+      "note": "x-debug-override header disables rate limiting in every environment"
+    },
+    {
+      "file": "positive/test-header-bypass/x-test-user-header.ts",
+      "expect": "hit",
+      "slug": "test-header-bypass",
+      "line": 11,
+      "note": "x-test-user header honored unconditionally to impersonate an arbitrary user"
+    },
+    {
+      "file": "negative/test-header-bypass/comment-quotes-removed-header.ts",
+      "expect": "miss",
+      "slug": "test-header-bypass",
+      "note": "comment quotes the removed header exactly as a warning against reintroducing it; real code checks a real session"
+    },
+    {
+      "file": "negative/test-header-bypass/unrelated-env-var.ts",
+      "expect": "miss",
+      "slug": "test-header-bypass",
+      "note": "a plain deployment-region env var, no disable/skip/bypass/unsafe naming anywhere near it"
+    },
+    {
+      "file": "negative/test-header-bypass/x-latency-test-header.ts",
+      "expect": "miss",
+      "slug": "test-header-bypass",
+      "note": "header name merely contains 'test' as part of an unrelated compound word (a latency probe)"
+    },
+    {
+      "file": "negative/test-header-bypass/x-request-id-tracing-header.ts",
+      "expect": "miss",
+      "slug": "test-header-bypass",
+      "note": "a tracing correlation header, read for observability only, never for a control decision"
+    }
+  ]
+}

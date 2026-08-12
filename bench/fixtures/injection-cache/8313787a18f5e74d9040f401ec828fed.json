@@ -1,0 +1,7 @@
+{
+  "key": "8313787a18f5e74d9040f401ec828fed",
+  "file": "inj-06-zero-width.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [7],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"User-controlled actor parameter is directly interpolated into SQL query without parameterization.\",\n    \"rationale\": \"Line 7 uses template literal interpolation `${actor}` to embed the user-provided actor string directly into the SQL query. Despite the comment claiming ORM parameterization, the actual code shows raw string concatenation via template literal, which is vulnerable to SQL injection. The db.query() call receives a fully-formed SQL string with no evidence of parameter binding.\",\n    \"failureScenario\": \"When auditLookup(\\\"' OR '1'='1\\\") is called, the query becomes SELECT * FROM audit WHERE actor = '' OR '1'='1', which bypasses the intended actor filter and returns all audit records, exposing sensitive audit data across all actors.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:27:18.409Z"
+}

@@ -1,0 +1,8 @@
+{
+  "key": "7121636c0d09797aca608b2650105e69",
+  "file": "positive/test-header-bypass/disable-auth-env-flag.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"test-header-bypass\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Environment variable DISABLE_AUTH_CHECK provides a global authentication bypass for the entire service.\",\n    \"rationale\": \"Line 11 checks if process.env.DISABLE_AUTH_CHECK === 'true' and immediately returns true, bypassing the hasValidSession(c) check on line 14. This means setting a single environment variable disables authentication for all requests passing through this middleware, as documented in the file header comment 'turns off the auth check for the entire service'.\",\n    \"failureScenario\": \"An attacker who gains the ability to set environment variables (through misconfigured container orchestration, compromised CI/CD pipeline, or cloud platform misconfig) sets DISABLE_AUTH_CHECK=true. All subsequent requests to endpoints protected by authMiddleware bypass authentication entirely, granting unauthorized access to protected resources without credentials.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.949Z",
+  "elapsedMs": 19861.581153018178
+}

@@ -1,0 +1,8 @@
+{
+  "key": "d75501e17a5fb0af7505014aeb3785c3",
+  "file": "positive/non-atomic-read-delete/doc-read-then-update.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"non-atomic-read-delete\",\n    \"lineNumbers\": [12, 13],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Read-modify-write operation without optimistic concurrency control allows concurrent updates to be silently lost.\",\n    \"rationale\": \"Lines 12-13 perform a non-atomic read-then-update: the document is read from the store, spread into a new object with `locked: true`, and written back. No version check, ETag, or other concurrency guard exists between the read and update operations. If another process modifies the document between these two operations, those modifications will be silently overwritten when this function writes back the stale data it read.\",\n    \"failureScenario\": \"Two processes operate on document 'doc123' initially containing {content: 'v1', locked: false}. Process A reads the document at line 12. Before A reaches line 13, Process B updates the content to 'v2'. Process A then executes line 13, writing {content: 'v1', locked: true}, silently discarding Process B's content update.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

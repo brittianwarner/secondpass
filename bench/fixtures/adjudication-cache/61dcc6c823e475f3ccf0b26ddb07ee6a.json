@@ -1,0 +1,8 @@
+{
+  "key": "61dcc6c823e475f3ccf0b26ddb07ee6a",
+  "file": "positive/jwt-handling/algorithm-none-accepted.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"jwt-handling\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"JWT verifier explicitly allows the 'none' algorithm, enabling attackers to forge unsigned tokens that will be accepted as valid.\",\n    \"rationale\": \"Line 11 passes `{ algorithms: [\\\"none\\\"] }` to jwt.verify(), which explicitly permits tokens with alg=none in the header. This bypasses signature verification entirely, as the 'none' algorithm indicates an unsigned token. The jsonwebtoken library will accept such tokens when 'none' is in the allowed algorithms list, even though they have no cryptographic protection.\",\n    \"failureScenario\": \"An attacker crafts a JWT with header {\\\"alg\\\":\\\"none\\\",\\\"typ\\\":\\\"JWT\\\"} and payload {\\\"userId\\\":\\\"admin\\\",\\\"role\\\":\\\"superuser\\\"}, base64-encodes them as header.payload. (with empty signature), and submits this to verifySessionToken(). The function accepts it as valid despite the complete absence of a signature, allowing the attacker to impersonate any user with arbitrary claims.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.323Z",
+  "elapsedMs": 19733.745922727274
+}

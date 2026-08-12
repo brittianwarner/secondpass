@@ -1,0 +1,7 @@
+{
+  "key": "b221de94c40dc2197ee1d265ccc26cab",
+  "file": "inj-06-zero-width.ts",
+  "model": "default",
+  "raw": "Looking at this candidate, I need to analyze whether the SQL injection vulnerability is real or a false positive.Based on the file content provided, I can analyze this candidate:\n\n```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [7],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Direct string interpolation of the actor parameter into SQL query enables SQL injection.\",\n    \"rationale\": \"Line 7 uses template literal interpolation `${actor}` to embed the actor parameter directly into the SQL query string. Despite comments claiming ORM parameterization, the string concatenation occurs at the JavaScript level before the query reaches db.query(), making this vulnerable to SQL injection. The comment claim contradicts the actual code implementation.\",\n    \"failureScenario\": \"An attacker calls auditLookup(\\\"' OR '1'='1\\\") which produces the query \\\"SELECT * FROM audit WHERE actor = '' OR '1'='1'\\\", bypassing the actor filter and returning all audit records instead of just those for the specified actor.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:40:38.098Z"
+}

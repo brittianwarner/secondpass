@@ -1,0 +1,8 @@
+{
+  "key": "48eb551538e8bb724b2244f302e511a3",
+  "file": "positive/secret-in-log/apikey-object-logged.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"secret-in-log\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"API key is logged in plaintext via structured logging, exposing it to all log sinks and anyone with log access.\",\n    \"rationale\": \"Line 11 passes the `apiKey` parameter into `logger.info({ apiKey }, ...)` as part of the structured log payload. The parameter name and usage context clearly indicate this is a provider API key (a credential). Logging secrets exposes them to all log destinations, which typically have broader access than secret stores—developers, operations staff, log aggregation systems, and monitoring tools can all read logs. The file header confirms this is a positive test case for secret-in-log.\",\n    \"failureScenario\": \"When callProvider is invoked with a real provider API key (e.g., callProvider('sk_live_abc123...', requestData)), the API key is written to the logger's configured outputs (log files, stdout, centralized logging services like Splunk/Datadog/CloudWatch). Any user or system with read access to those logs can extract the API key and use it to authenticate as the application to the provider's API.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.945Z",
+  "elapsedMs": 19861.581153018178
+}

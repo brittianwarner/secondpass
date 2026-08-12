@@ -1,0 +1,8 @@
+{
+  "key": "a723de847afca65e866ffdb9e87cf695",
+  "file": "positive/ssrf/got-request-body-url.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"ssrf\",\n    \"lineNumbers\": [15],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Unvalidated user-supplied URL is passed directly to got() HTTP client, allowing server-side request forgery.\",\n    \"rationale\": \"Line 15 uses body.imageUrl directly in got() without any validation, allowlisting, or protocol restrictions. The imageUrl field comes from the request body (ThumbnailBody interface, line 10-12) and is fully attacker-controlled. No checks prevent requests to internal IPs, localhost, or cloud metadata endpoints.\",\n    \"failureScenario\": \"An attacker sends {\\\"imageUrl\\\": \\\"http://169.254.169.254/latest/meta-data/iam/security-credentials/\\\"} to the thumbnailHandler, causing the server to fetch AWS IAM credentials from the metadata service, which are then returned in the response buffer, leading to cloud account compromise.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.945Z",
+  "elapsedMs": 19861.581153018178
+}

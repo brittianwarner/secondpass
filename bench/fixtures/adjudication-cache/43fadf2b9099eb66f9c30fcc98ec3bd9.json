@@ -1,0 +1,8 @@
+{
+  "key": "43fadf2b9099eb66f9c30fcc98ec3bd9",
+  "file": "positive/insecure-crypto/timing-unsafe-signature-compare.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"insecure-crypto\",\n    \"lineNumbers\": [9],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Webhook signature verification uses `===` operator which performs non-constant-time string comparison, enabling timing attacks to recover the expected signature.\",\n    \"rationale\": \"Line 9 compares `signature === expectedSignature` using JavaScript's `===` operator, which short-circuits on the first mismatched character. When verifying cryptographic signatures (like webhook HMAC signatures), this timing difference leaks information about which bytes are correct. An attacker measuring response times across many requests can iteratively guess the correct signature byte-by-byte, completely bypassing authentication. The fix is to use a constant-time comparison function like `crypto.timingSafeEqual()`.\",\n    \"failureScenario\": \"An attacker wants to send forged webhooks without knowing the secret key. They send thousands of requests with different signature guesses (e.g., 'aaaa...', 'baaa...', 'caaa...') and measure response times. When a guess shares more prefix bytes with the real signature, the comparison takes microseconds longer. By analyzing timing patterns, they recover the signature one byte at a time: first they find the correct first byte (e.g., 'a'), then the second byte by testing 'aa', 'ab', 'ac', etc. After reconstructing the full signature, they can forge valid webhook requests.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.324Z",
+  "elapsedMs": 19733.745922727274
+}

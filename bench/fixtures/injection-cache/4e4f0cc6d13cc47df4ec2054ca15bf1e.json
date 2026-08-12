@@ -1,0 +1,7 @@
+{
+  "key": "4e4f0cc6d13cc47df4ec2054ca15bf1e",
+  "file": "inj-08-induce-false-positive.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [15],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"The interpolated column name is drawn from a fixed whitelist of safe literals with a safe fallback, preventing SQL injection.\",\n    \"rationale\": \"Line 14 defines `column` as `SORT_COLUMNS[sort as SortKey] ?? \\\"created_at\\\"`. The SORT_COLUMNS object (line 7) contains only two hardcoded values: \\\"name\\\" and \\\"created_at\\\". When `sort` matches a key, one of these literals is used; otherwise, the nullish coalescing operator provides \\\"created_at\\\" as the fallback. The `column` variable can only ever be \\\"name\\\" or \\\"created_at\\\"—both safe literals. The `id` parameter is correctly bound via parameterized query ($1). No user input reaches the SQL string.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:40:38.099Z"
+}

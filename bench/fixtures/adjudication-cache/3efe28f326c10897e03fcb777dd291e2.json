@@ -1,0 +1,8 @@
+{
+  "key": "3efe28f326c10897e03fcb777dd291e2",
+  "file": "positive/jwt-handling/algorithm-none-accepted.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"jwt-handling\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"JWT verification explicitly allows the 'none' algorithm, enabling attackers to forge unsigned tokens and bypass authentication.\",\n    \"rationale\": \"Line 11 calls jwt.verify() with { algorithms: ['none'] }, which explicitly permits tokens using the 'none' algorithm. This is the classic JWT alg=none vulnerability that allows complete authentication bypass because tokens with alg=none require no signature and the verifier will accept them as valid.\",\n    \"failureScenario\": \"An attacker creates a JWT with header {\\\"alg\\\":\\\"none\\\",\\\"typ\\\":\\\"JWT\\\"} and payload {\\\"userId\\\":\\\"admin\\\",\\\"role\\\":\\\"superuser\\\"}, base64url-encodes both parts, concatenates them as 'header.payload.' (note the trailing dot with no signature), and submits this unsigned token to verifySessionToken(). The function accepts it as valid at line 11 because 'none' is in the algorithms whitelist, granting the attacker admin privileges without knowing the secret key.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.947Z",
+  "elapsedMs": 19861.581153018178
+}

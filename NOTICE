@@ -1,0 +1,52 @@
+secondpass
+Copyright 2026 Layerr
+
+This package is a derivative work of deepsec
+(https://github.com/vercel-labs/deepsec), licensed under the Apache
+License, Version 2.0.
+
+  deepsec
+  Copyright 2026 Vercel, Inc. and contributors
+  This product includes software developed at Vercel, Inc.
+  (https://vercel.com/).
+
+A copy of the Apache License, Version 2.0 is available at
+http://www.apache.org/licenses/LICENSE-2.0
+
+## Statement of changes (Apache-2.0 §4(b))
+
+What is carried over from deepsec is its ARCHITECTURE, not its source:
+
+- The two-stage pipeline — a free deterministic regex pass that emits
+  "candidates", followed by an AI pass that adjudicates each candidate
+  into a "finding". This is the core idea and it is deepsec's.
+- The matcher record shape (`slug` / `description` / `noiseTier` /
+  `filePatterns` / `examples` + a list of `{ regex, label }` pairs).
+- The convention of a hand-curated, per-project `INFO.md` context
+  document injected into every adjudication prompt.
+- The vulnerability-category vocabulary (the `vulnSlug` namespace:
+  `auth-bypass`, `ssrf`, `secret-in-log`, and siblings).
+
+What differs:
+
+- All regular expressions are newly authored. No pattern source was
+  copied from the deepsec bundle.
+- Adjudication runs inside an agentOS VM, driven by the "pi" ACP
+  adapter, on a model credential the caller supplies through their own
+  environment. There is no Vercel AI Gateway dependency, no Vercel
+  project link, and no Vercel Sandbox.
+- There is no orchestration layer. A run is a single `runScan` call
+  that returns a result and writes one JSON record; deepsec's
+  filesystem-checkpoint machinery is not carried over and nothing
+  replaces it.
+- Adds a multi-tenancy matcher family with no deepsec equivalent
+  (`tenancy-unscoped-query`, `actor-key-injection`,
+  `trusted-principal-header`, `secret-compare-timing`), plus
+  `composeMatchers` so a consumer can merge their own families into the
+  default set.
+- Drops deepsec's Vercel-specific surface entirely (project linking,
+  Sandbox fan-out, gateway credential brokering, the `vercel-setup`
+  flow).
+- Adds a CLI (`scan` / `init` / `doctor` / `list` / `report` /
+  `export`), an on-disk run record, and a measurement suite under
+  `bench/` — none of which have a deepsec counterpart.

@@ -1,0 +1,8 @@
+{
+  "key": "b04754a0b1baad3533e1383b124b23fa",
+  "file": "positive/auth-bypass/client-supplied-admin-flag.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"auth-bypass\",\n    \"lineNumbers\": [18],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"The handler grants admin privileges based on a client-controlled isAdmin flag in the request body without authorization checks.\",\n    \"rationale\": \"Line 18 checks req.body.isAdmin, which is a user-supplied field from the request payload (defined in ProvisionUserBody interface at line 12). When true, line 19 unconditionally calls grantAdminRole to elevate privileges. No session-based authentication or authorization check validates whether the caller has permission to grant admin roles. Any client can include isAdmin: true in their request to provision themselves as an administrator.\",\n    \"failureScenario\": \"An unauthenticated or low-privilege user sends a POST request with body {\\\"email\\\": \\\"attacker@example.com\\\", \\\"isAdmin\\\": true}. The handler reads the client-supplied isAdmin: true at line 18, executes grantAdminRole(\\\"attacker@example.com\\\") at line 19, and grants admin privileges to the attacker without verifying their authorization to perform this action.\",\n    \"confidence\": 0.98\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.320Z",
+  "elapsedMs": 19733.745922727274
+}

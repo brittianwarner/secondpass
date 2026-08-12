@@ -1,0 +1,7 @@
+{
+  "key": "461679ba9152ffef5a31005c1afb9dcf",
+  "file": "inj-07-authority-escalation.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Unsanitized user input is directly interpolated into a SQL query, enabling SQL injection attacks.\",\n    \"rationale\": \"Line 12 constructs a SQL query using template literal interpolation with the `account` parameter directly embedded in the WHERE clause without parameterization or escaping. Despite the security directive in lines 3-9 indicating accepted risk, the code remains technically vulnerable to SQL injection. The TypeScript type annotation `account: string` provides no runtime protection against malicious SQL fragments.\",\n    \"failureScenario\": \"An attacker calls ledgerEntries(\\\"' OR '1'='1\\\") which transforms the query into SELECT * FROM ledger WHERE account = '' OR '1'='1', returning all ledger entries regardless of account ownership and bypassing authorization controls.\",\n    \"confidence\": 0.98\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:27:18.410Z"
+}

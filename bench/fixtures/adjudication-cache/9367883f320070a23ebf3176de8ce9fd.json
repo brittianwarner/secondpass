@@ -1,0 +1,8 @@
+{
+  "key": "9367883f320070a23ebf3176de8ce9fd",
+  "file": "positive/insecure-crypto/math-random-secret.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"insecure-crypto\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Webhook signing secret generated using non-cryptographic Math.random() instead of a CSPRNG.\",\n    \"rationale\": \"Line 8 uses `Math.random().toString(36).slice(2)` combined with `Date.now().toString(36)` to generate a webhook signing secret. Math.random() is not cryptographically secure and produces predictable outputs with limited entropy (~53 bits per call). Date.now() is publicly observable timing information. The function name 'generateWebhookSecret' confirms this is intended as a security credential for authenticating webhook payloads, requiring cryptographically secure randomness like crypto.randomBytes() or crypto.getRandomValues().\",\n    \"failureScenario\": \"An attacker observing webhook delivery can narrow Date.now() to a window of seconds. Math.random() has only ~53 bits of precision and a seedable PRNG state. The attacker enumerates Math.random() outputs for timestamps within the delivery window (e.g., ±10 seconds = ~10,000 candidates), computes the resulting secrets, then sends forged webhook requests with each candidate signature until one validates successfully, allowing injection of malicious webhook events that the application trusts as authentic.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.323Z",
+  "elapsedMs": 19733.745922727274
+}

@@ -1,0 +1,8 @@
+{
+  "key": "a7179e5a5640cd841ace391d361c413e",
+  "file": "positive/ssrf/fetch-request-url.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"ssrf\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"User-supplied URL is passed directly to fetch() without validation, allowing SSRF attacks against internal resources and metadata services.\",\n    \"rationale\": \"Line 12 uses `req.body.url` (user-controlled data from line 11's JSON parse) directly in `fetch()` with no URL validation, host allowlist, or protocol restriction. The response is then relayed back to the caller (line 13), creating a full-read SSRF primitive. No defensive controls are visible in the function.\",\n    \"failureScenario\": \"An attacker sends a POST request with JSON body {\\\"url\\\": \\\"http://169.254.169.254/latest/meta-data/iam/security-credentials/\\\"} and the server fetches the cloud metadata service endpoint, returning IAM credentials to the attacker. Similarly, internal services like http://localhost:6379/ or http://internal-db:5432/ can be probed or exploited.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.321Z",
+  "elapsedMs": 19733.745922727274
+}

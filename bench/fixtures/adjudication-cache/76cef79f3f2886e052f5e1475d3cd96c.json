@@ -1,0 +1,8 @@
+{
+  "key": "76cef79f3f2886e052f5e1475d3cd96c",
+  "file": "negative/non-atomic-read-delete/mutex-guarded-delete.ts",
+  "model": "default",
+  "raw": "Looking at this candidate, I need to analyze whether the non-atomic read-delete pattern is actually vulnerable in this context.```json\n[\n  {\n    \"vulnSlug\": \"non-atomic-read-delete\",\n    \"lineNumbers\": [13, 14],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"The check-then-delete pattern is protected by a per-key mutex that serializes concurrent operations for the same idempotencyKey.\",\n    \"rationale\": \"Lines 13-14 show a non-atomic has/delete sequence, but line 12 wraps this in mutex.runExclusive(idempotencyKey, ...), which ensures that for any given key, only one caller can execute the critical section at a time. This mutex serialization eliminates the TOCTOU race condition that would otherwise exist between the check and delete operations. The file header explicitly marks this as NEGATIVE, confirming that the mutex provides the necessary atomicity guarantee.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.325Z",
+  "elapsedMs": 19733.745922727274
+}

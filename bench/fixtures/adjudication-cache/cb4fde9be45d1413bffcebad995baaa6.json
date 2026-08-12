@@ -1,0 +1,8 @@
+{
+  "key": "cb4fde9be45d1413bffcebad995baaa6",
+  "file": "positive/cors-wildcard/reflected-origin-header.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"cors-wildcard\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Origin header is unconditionally reflected in Access-Control-Allow-Origin without validation, allowing any website to bypass CORS protection.\",\n    \"rationale\": \"Line 11 sets the CORS Access-Control-Allow-Origin header directly from req.headers.origin with no validation or allowlist checking. This is functionally equivalent to a wildcard CORS policy and permits any origin to read responses. When combined with credentials, this allows any malicious website to make authenticated requests and exfiltrate sensitive data.\",\n    \"failureScenario\": \"An attacker hosts a malicious page at https://evil.com that makes a fetch request with credentials to this endpoint. The request includes 'Origin: https://evil.com', which is reflected back as 'Access-Control-Allow-Origin: https://evil.com'. The browser permits the malicious site to read the response, potentially exposing authenticated user data or enabling CSRF-like attacks.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.323Z",
+  "elapsedMs": 19733.745922727274
+}

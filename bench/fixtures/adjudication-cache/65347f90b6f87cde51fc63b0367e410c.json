@@ -1,0 +1,8 @@
+{
+  "key": "65347f90b6f87cde51fc63b0367e410c",
+  "file": "positive/unsafe-redirect/location-header-from-body.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"unsafe-redirect\",\n    \"lineNumbers\": [13],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Location header set directly from request body without validation, enabling open redirect attacks.\",\n    \"rationale\": \"Line 13 sets the Location header for a 302 redirect to `req.body.returnUrl`, which comes directly from user-controlled JSON input (line 10 reads `returnUrl` from the request body). No validation, allowlist, or sanitization is applied to ensure the redirect target is safe. The file comment on line 4-5 confirms this is an open-redirect vulnerability expressed as a raw header.\",\n    \"failureScenario\": \"An attacker sends a POST request with JSON body `{\\\"returnUrl\\\": \\\"https://malicious-site.com/steal-credentials\\\"}`. The server responds with a 302 redirect to the attacker's domain. In an SSO flow, victims who follow this redirect may believe they are being sent to a legitimate authentication page and enter credentials on the phishing site.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.322Z",
+  "elapsedMs": 19733.745922727274
+}

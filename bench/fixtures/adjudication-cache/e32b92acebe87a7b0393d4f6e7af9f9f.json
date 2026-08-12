@@ -1,0 +1,8 @@
+{
+  "key": "e32b92acebe87a7b0393d4f6e7af9f9f",
+  "file": "negative/jwt-handling/decode-after-verify.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"jwt-handling\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"false-positive\",\n    \"severity\": \"low\",\n    \"summary\": \"JWT decode occurs after jwt.verify() has already validated the signature, so the token is already authenticated.\",\n    \"rationale\": \"Line 11 calls jwt.verify(token, key, { algorithms: ['RS256'] }) which cryptographically validates the JWT signature and throws an exception on failure. Only if verification succeeds does execution reach line 12, where jwt.decode() is used to parse the claims from the already-verified token. This is a safe pattern where decode is used for convenient claim extraction after verification has confirmed authenticity.\",\n    \"failureScenario\": \"\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.323Z",
+  "elapsedMs": 19733.745922727274
+}

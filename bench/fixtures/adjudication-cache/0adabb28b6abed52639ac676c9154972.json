@@ -1,0 +1,8 @@
+{
+  "key": "0adabb28b6abed52639ac676c9154972",
+  "file": "positive/ssrf/new-url-from-query.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"ssrf\",\n    \"lineNumbers\": [10, 11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"OAuth callback URL constructed from untrusted query parameter and dereferenced without validation, allowing arbitrary requests to any URL.\",\n    \"rationale\": \"Line 10 constructs a URL directly from `req.query.callback` without any validation or allowlist. Line 11 immediately fetches this attacker-controlled URL and line 12 returns the response. No host checking, protocol restrictions, or URL validation is performed before making the outbound request.\",\n    \"failureScenario\": \"An attacker sends a request with `?callback=http://169.254.169.254/latest/meta-data/iam/security-credentials/admin-role` to access AWS instance metadata and exfiltrate IAM credentials, or uses `?callback=http://localhost:6379/CONFIG%20GET%20*` to probe internal Redis instances and extract configuration.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.945Z",
+  "elapsedMs": 19861.581153018178
+}

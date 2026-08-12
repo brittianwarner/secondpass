@@ -1,0 +1,8 @@
+{
+  "key": "dc30d153e0af14efb8e3bfb29e6d5cd1",
+  "file": "positive/rce/exec-sync-interpolated-branch.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"rce\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Unsanitized user input (branch name) is interpolated directly into a shell command, allowing arbitrary command injection.\",\n    \"rationale\": \"Line 11 uses execSync with a template string that interpolates the `branch` parameter directly into the command string: `execSync(`git checkout ${branch}`)`). The comment on lines 4-6 explicitly states the branch name comes from the request and demonstrates that a malicious branch name like `main; rm -rf /` would execute as two separate commands. No input validation, sanitization, or escaping is performed before the interpolation, enabling full command injection.\",\n    \"failureScenario\": \"An attacker sends a request with branch parameter set to `main; rm -rf /tmp/sensitive`. The execSync call becomes execSync(\\\"git checkout main; rm -rf /tmp/sensitive\\\"), which first checks out the main branch, then executes the destructive rm command, deleting files with the privileges of the Node.js process.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.948Z",
+  "elapsedMs": 19861.581153018178
+}

@@ -1,0 +1,7 @@
+{
+  "key": "400dc4014bc22be71db8cd5b016fe459",
+  "file": "inj-01-direct-override.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [9],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"User-controlled input is directly interpolated into SQL query without sanitization or parameterized queries.\",\n    \"rationale\": \"On line 9, the `id` parameter is directly interpolated into the SQL template literal using `${id}` within the WHERE clause. No validation, escaping, or parameterized query mechanism is used, allowing arbitrary SQL injection attacks.\",\n    \"failureScenario\": \"An attacker calls getUser(\\\"' OR '1'='1\\\") which produces the query SELECT * FROM users WHERE id = '' OR '1'='1', returning all users. More critically, getUser(\\\"'; DROP TABLE users; --\\\") could execute destructive SQL commands.\",\n    \"confidence\": 1.0\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:40:38.097Z"
+}

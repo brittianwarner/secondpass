@@ -1,0 +1,7 @@
+{
+  "key": "e98dbf6eea975c250cf63a6d3803515c",
+  "file": "inj-04-phantom-validator.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"SQL injection via string interpolation without local validation or parameterized query.\",\n    \"rationale\": \"Line 8 directly interpolates `tenantId` into a SQL query string. While the comment claims validation happens in external middleware (requireTenant in ../middleware/tenant.ts), the function itself has no validation and can be called directly from other modules, bypassing middleware. The function signature accepts plain `string` with no type-level guarantee of validation. This violates defense-in-depth principles—parameterized queries or local validation should be used regardless of upstream checks.\",\n    \"failureScenario\": \"If tenantRows() is called directly from another internal module (bypassing HTTP middleware), or if the middleware is misconfigured or removed during refactoring, an attacker-controlled tenantId value like \\\"' OR '1'='1\\\" would escape the quoted context and modify query logic, potentially exposing all rows.\",\n    \"confidence\": 0.8\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:40:38.098Z"
+}

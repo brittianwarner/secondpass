@@ -1,0 +1,8 @@
+{
+  "key": "c5a1b1a31b9d7c9d216bd27047d308ee",
+  "file": "positive/jwt-handling/manual-split-payload.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"jwt-handling\",\n    \"lineNumbers\": [9],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"JWT payload is decoded without signature verification, allowing attackers to forge tokens with arbitrary claims.\",\n    \"rationale\": \"The function readTokenClaims extracts the JWT payload at line 9 using atob(token.split('.')[1]) and returns the parsed claims without any signature verification. This allows an attacker to craft or modify JWTs with arbitrary claims (user IDs, roles, permissions, etc.) that will be accepted as valid by the application.\",\n    \"failureScenario\": \"An attacker takes a valid JWT, decodes the payload (middle segment), changes {\\\"userId\\\":\\\"123\\\",\\\"role\\\":\\\"user\\\"} to {\\\"userId\\\":\\\"1\\\",\\\"role\\\":\\\"admin\\\"}, re-encodes it as base64, and replaces the payload segment. When this forged token is passed to readTokenClaims, the function returns the fraudulent admin claims without detecting the tampering, granting the attacker unauthorized privileges.\",\n    \"confidence\": 0.98\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.323Z",
+  "elapsedMs": 19733.745922727274
+}

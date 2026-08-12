@@ -1,0 +1,8 @@
+{
+  "key": "367257c5ea17be54f30cfcd3e54d1088",
+  "file": "positive/ssrf/new-url-from-query.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"ssrf\",\n    \"lineNumbers\": [10, 11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"User-controlled query parameter is used to construct a URL that is fetched without host validation, allowing server-side request forgery.\",\n    \"rationale\": \"Line 10 constructs a URL directly from req.query.callback with no validation. Line 11 passes this attacker-controlled URL to fetch(), which will make a request to any host the attacker specifies. The response is then returned to the attacker on line 12. No allowlist or host restriction is applied.\",\n    \"failureScenario\": \"An attacker sends a request with ?callback=http://169.254.169.254/latest/meta-data/iam/security-credentials/ to access AWS instance metadata and retrieve IAM credentials, or ?callback=http://localhost:6379/ to probe internal Redis instances, or ?callback=http://internal-service/admin to access internal-only endpoints.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.321Z",
+  "elapsedMs": 19733.745922727274
+}

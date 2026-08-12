@@ -1,0 +1,8 @@
+{
+  "key": "23529d929c8ac666571f82f6e2f50839",
+  "file": "positive/test-header-bypass/disable-auth-env-flag.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"test-header-bypass\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"Environment variable DISABLE_AUTH_CHECK allows complete authentication bypass when set to 'true'.\",\n    \"rationale\": \"Line 11 checks if process.env.DISABLE_AUTH_CHECK equals 'true' and immediately returns true (authenticated), bypassing the hasValidSession check on line 14. This creates a global kill-switch that disables authentication for the entire service and can be exploited through deployment misconfiguration or by an attacker with access to environment configuration (cloud console, CI/CD pipeline, container orchestration, or .env files).\",\n    \"failureScenario\": \"An attacker gains access to the deployment configuration through compromised CI/CD credentials or cloud console access, sets DISABLE_AUTH_CHECK=true in the environment variables, and redeploys the service. All subsequent requests to the service bypass authentication regardless of session validity, granting unauthorized access to all protected resources. Alternatively, a developer accidentally sets this flag in a production .env file for debugging purposes and deploys, exposing all endpoints without authentication.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.325Z",
+  "elapsedMs": 19733.745922727274
+}

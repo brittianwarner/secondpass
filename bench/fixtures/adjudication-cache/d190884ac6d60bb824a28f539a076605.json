@@ -1,0 +1,8 @@
+{
+  "key": "d190884ac6d60bb824a28f539a076605",
+  "file": "positive/sql-injection/concatenated-delete.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [11],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"User-controlled token parameter is concatenated directly into a SQL DELETE query, allowing SQL injection.\",\n    \"rationale\": \"Line 11 constructs a SQL query by concatenating the unsanitized `token` parameter into the DELETE statement using string concatenation: `\\\"DELETE FROM sessions WHERE token = '\\\" + token + \\\"'\\\"`. No parameterized queries or escaping is used. The file header confirms this is a positive test case demonstrating how a token containing a quote can break out of the string literal and manipulate the query logic.\",\n    \"failureScenario\": \"An attacker calls revokeSession(\\\"' OR '1'='1\\\") which produces the query \\\"DELETE FROM sessions WHERE token = '' OR '1'='1'\\\", causing all sessions in the table to be deleted instead of a single session. Alternatively, revokeSession(\\\"'; DROP TABLE sessions; --\\\") could execute additional SQL commands.\",\n    \"confidence\": 0.98\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:16:32.945Z",
+  "elapsedMs": 19861.581153018178
+}

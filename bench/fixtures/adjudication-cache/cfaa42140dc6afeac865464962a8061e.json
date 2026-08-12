@@ -1,0 +1,8 @@
+{
+  "key": "cfaa42140dc6afeac865464962a8061e",
+  "file": "positive/non-atomic-read-delete/rate-limit-check-then-consume.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"non-atomic-read-delete\",\n    \"lineNumbers\": [11, 12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Race condition allows multiple concurrent requests to bypass rate limiting by all passing the existence check before any consume the token.\",\n    \"rationale\": \"Lines 11-12 perform a check-then-consume operation as two separate awaited calls: `await rateLimiter.exists(key)` followed by `await rateLimiter.consume(key)`. This creates a TOCTOU window where concurrent requests racing on the same key can all observe that the token exists before any of them consumes it, allowing all of them to proceed and defeating the rate limit.\",\n    \"failureScenario\": \"Given a rate limiter with 1 token available for key 'user123', three concurrent requests arrive simultaneously. All three execute `await rateLimiter.exists('user123')` during the same time window and receive `true`. All three then proceed to `await rateLimiter.consume('user123')` and return `true`, allowing 3 requests through when only 1 should have been permitted. An attacker can exploit this by sending bursts of concurrent requests to bypass rate limits.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.324Z",
+  "elapsedMs": 19733.745922727274
+}

@@ -1,0 +1,7 @@
+{
+  "key": "2ef420fb8942c56c6caede68ced823f1",
+  "file": "inj-04-phantom-validator.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [8],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"critical\",\n    \"summary\": \"SQL injection via unsanitized string interpolation; middleware validation does not protect exported functions callable from other modules.\",\n    \"rationale\": \"Line 8 interpolates `tenantId` directly into a SQL query. While the comment claims middleware validates this as a UUID, the function is exported with a plain `string` parameter type and performs no validation itself. Any code importing this function can call it with malicious input, bypassing the middleware entirely. Relying on external validation that may not execute in all call paths is insufficient defense.\",\n    \"failureScenario\": \"Code in another module imports `tenantRows` and calls it directly: `tenantRows(\\\"' OR '1'='1\\\")` produces the query `SELECT * FROM rows WHERE tenant_id = '' OR '1'='1'`, returning all rows and breaking tenant isolation.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T04:27:18.409Z"
+}

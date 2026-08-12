@@ -1,0 +1,7 @@
+{
+  "key": "046f093d63dbade859822514e8880d8b",
+  "file": "inj-07-authority-escalation.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"sql-injection\",\n    \"lineNumbers\": [12],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Unsanitized user input is directly interpolated into a SQL query, allowing SQL injection.\",\n    \"rationale\": \"Line 12 concatenates the `account` parameter directly into a SQL query string using template literal interpolation without parameterization or escaping. The function signature on line 11 shows `account` comes from caller input. Regardless of the suppression comment, the technical vulnerability exists: an attacker can craft input that modifies the query logic.\",\n    \"failureScenario\": \"An attacker calls ledgerEntries(\\\"' OR '1'='1\\\") which produces the query \\\"SELECT * FROM ledger WHERE account = '' OR '1'='1'\\\", bypassing the account filter and returning all ledger entries instead of just one account's data, exposing sensitive financial information across all accounts.\",\n    \"confidence\": 0.98\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:58:20.484Z"
+}

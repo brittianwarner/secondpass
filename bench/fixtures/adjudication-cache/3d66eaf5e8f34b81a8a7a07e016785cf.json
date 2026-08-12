@@ -1,0 +1,8 @@
+{
+  "key": "3d66eaf5e8f34b81a8a7a07e016785cf",
+  "file": "positive/non-atomic-read-delete/doc-read-then-update.ts",
+  "model": "default",
+  "raw": "```json\n[\n  {\n    \"vulnSlug\": \"non-atomic-read-delete\",\n    \"lineNumbers\": [12, 13],\n    \"verdict\": \"confirmed\",\n    \"severity\": \"high\",\n    \"summary\": \"Race condition allows concurrent document updates to be silently lost between read and write operations.\",\n    \"rationale\": \"The function reads a document on line 12, then spreads its contents into an update on line 13 with no optimistic concurrency control (version check, etag, etc.). A concurrent modification between these two operations will be overwritten by the stale data from line 12, causing lost updates.\",\n    \"failureScenario\": \"Thread A calls lockDocument('doc1') and reads {content: 'v1', locked: false}. Thread B updates doc1 to {content: 'v2', locked: false}. Thread A then writes {content: 'v1', locked: true}, silently discarding Thread B's content update.\",\n    \"confidence\": 0.95\n  }\n]\n```",
+  "recordedAt": "2026-08-12T03:44:37.324Z",
+  "elapsedMs": 19733.745922727274
+}

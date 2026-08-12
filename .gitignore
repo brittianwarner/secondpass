@@ -1,0 +1,14 @@
+node_modules/
+*.tgz
+
+# Scanner state: run records for whatever project you point secondpass at.
+.secondpass/
+
+# Bench artifacts: baselines and reports are local/CI artifacts, not source.
+bench/baseline.json
+bench/perf-baseline.json
+bench/e2e-report.md
+
+.env
+.env.local
+.DS_Store
