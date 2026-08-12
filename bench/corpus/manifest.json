@@ -50,7 +50,7 @@
       "file": "negative/auth-bypass/strict-equality-authenticated.ts",
       "expect": "miss",
       "slug": "auth-bypass",
-      "note": "same shape as the loose-equality positive, but with === \u2014 no coercion possible"
+      "note": "same shape as the loose-equality positive, but with === — no coercion possible"
     },
     {
       "file": "positive/sql-injection/concatenated-delete.ts",
@@ -148,7 +148,7 @@
       "file": "negative/ssrf/hardcoded-third-party-url.ts",
       "expect": "miss",
       "slug": "ssrf",
-      "note": "fully literal, hardcoded third-party URL \u2014 no caller input reaches the target"
+      "note": "fully literal, hardcoded third-party URL — no caller input reaches the target"
     },
     {
       "file": "negative/ssrf/internal-http-client-wrapper.ts",
@@ -258,7 +258,7 @@
       "file": "negative/xss/text-content-assignment.ts",
       "expect": "miss",
       "slug": "xss",
-      "note": "textContent, not innerHTML \u2014 the string is never parsed as markup"
+      "note": "textContent, not innerHTML — the string is never parsed as markup"
     },
     {
       "file": "positive/unsafe-redirect/location-header-from-body.ts",
@@ -356,7 +356,7 @@
       "file": "negative/cors-wildcard/hardcoded-specific-origin.ts",
       "expect": "miss",
       "slug": "cors-wildcard",
-      "note": "a single, hardcoded, specific origin \u2014 not a wildcard, not derived from the caller"
+      "note": "a single, hardcoded, specific origin — not a wildcard, not derived from the caller"
     },
     {
       "file": "negative/cors-wildcard/origin-false-restrictive.ts",
@@ -369,7 +369,7 @@
       "expect": "hit",
       "slug": "jwt-handling",
       "line": 11,
-      "note": "verifier accepts the 'none' algorithm \u2014 classic alg=none forgery"
+      "note": "verifier accepts the 'none' algorithm — classic alg=none forgery"
     },
     {
       "file": "positive/jwt-handling/decode-without-verify.ts",
@@ -408,7 +408,7 @@
       "file": "negative/jwt-handling/jose-strong-algorithm.ts",
       "expect": "miss",
       "slug": "jwt-handling",
-      "note": "jose's jwtVerify with a strong asymmetric algorithm (EdDSA) \u2014 real signature check"
+      "note": "jose's jwtVerify with a strong asymmetric algorithm (EdDSA) — real signature check"
     },
     {
       "file": "negative/jwt-handling/strong-config-explicit-expiration.ts",
@@ -512,7 +512,7 @@
       "file": "negative/rce/evaluate-formula-library.ts",
       "expect": "miss",
       "slug": "rce",
-      "note": "a sandboxed expression-parser's evaluate(), not the eval() global \u2014 same shape, different capability"
+      "note": "a sandboxed expression-parser's evaluate(), not the eval() global — same shape, different capability"
     },
     {
       "file": "negative/rce/hardcoded-shell-command.ts",
@@ -539,7 +539,7 @@
       "expect": "hit",
       "slug": "non-atomic-read-delete",
       "line": 11,
-      "note": "await cache.has() then a separate await cache.delete() \u2014 two concurrent callers can both pass the check"
+      "note": "await cache.has() then a separate await cache.delete() — two concurrent callers can both pass the check"
     },
     {
       "file": "positive/non-atomic-read-delete/rate-limit-check-then-consume.ts",
@@ -558,7 +558,7 @@
       "file": "negative/non-atomic-read-delete/compare-and-set-guard.ts",
       "expect": "miss",
       "slug": "non-atomic-read-delete",
-      "note": "inverted set-if-absent inside a transaction \u2014 the actual fix for the idempotency race"
+      "note": "inverted set-if-absent inside a transaction — the actual fix for the idempotency race"
     },
     {
       "file": "negative/non-atomic-read-delete/mutex-guarded-delete.ts",
@@ -623,6 +623,19 @@
       "expect": "miss",
       "slug": "test-header-bypass",
       "note": "a tracing correlation header, read for observability only, never for a control decision"
+    },
+    {
+      "file": "positive/rce/exec-concatenated-command.ts",
+      "expect": "hit",
+      "slug": "rce",
+      "line": 11,
+      "note": "a request value concatenated onto a quoted command prefix (exec(\"git log \" + branch))"
+    },
+    {
+      "file": "negative/rce/regex-exec-concatenated-result.ts",
+      "expect": "miss",
+      "slug": "rce",
+      "note": "RegExp.prototype.exec whose match result is concatenated — matching, not executing"
     }
   ]
 }

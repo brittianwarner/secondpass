@@ -340,6 +340,17 @@ export const rce: Matcher = {
       notPrecededBy: /[.\w$]/,
       label: "shell command from a non-literal string",
     },
+    // A quoted command prefix concatenated with something else —
+    // `exec("git log " + branch)`. Neither pattern above sees it: the first
+    // wants a template literal, and the second's lookahead deliberately
+    // skips anything opening with a quote. Bounded tempered dot for the same
+    // reason as the SQL concatenation pattern, so an embedded quote inside
+    // the command string does not end the match early.
+    {
+      regex: /\b(?:exec|execSync|spawnSync)\s*\(\s*(["'])(?:(?!\1).){0,200}\1\s*\+/,
+      notPrecededBy: /[.\w$]/,
+      label: "shell command built by concatenation",
+    },
     // The member-access form the lookbehind above deliberately drops. Scoped
     // to receivers that actually name the child_process module, so it reads
     // `cp.exec(...)` without also reading `pattern.exec(...)`.
