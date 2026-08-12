@@ -299,6 +299,28 @@ function makeProgressReporter(params: {
     if (interactive && !quiet) process.stdout.write("\n");
   };
 
+  // Nothing settles for the length of a whole adjudication, and the bar below
+  // only draws on a settled prompt — so the first prompt's worth of time
+  // rendered as a frozen line with no sign the process was alive. A ticking
+  // elapsed count is the difference between "working" and "hung" to whoever is
+  // deciding whether to hit ^C.
+  let waiting: ReturnType<typeof setInterval> | undefined;
+  const stopWaiting = (): void => {
+    if (waiting === undefined) return;
+    clearInterval(waiting);
+    waiting = undefined;
+  };
+  const startWaiting = (candidates: number, prompts: number): void => {
+    if (!interactive) return;
+    stopWaiting();
+    waiting = setInterval(() => {
+      const elapsed = Math.round((Date.now() - startedAt) / 1000);
+      line(paint("dim", `adjudicate ${candidates} candidates in ${prompts} prompts… ${elapsed}s`));
+    }, 1000);
+    // Never let the ticker be the reason the process stays alive.
+    waiting.unref?.();
+  };
+
   return (event) => {
     switch (event.kind) {
       case "scan-started":
@@ -320,8 +342,10 @@ function makeProgressReporter(params: {
         line(
           paint("dim", `adjudicate ${event.candidates} candidates in ${event.prompts} prompts…`),
         );
+        startWaiting(event.candidates, event.prompts);
         break;
       case "adjudication-progress": {
+        stopWaiting();
         const elapsed = (Date.now() - startedAt) / 1000;
         const rate = event.settled > 0 ? elapsed / event.settled : 0;
         const remaining = Math.max(0, Math.round(rate * (event.total - event.settled)));
@@ -335,6 +359,7 @@ function makeProgressReporter(params: {
         break;
       }
       case "adjudication-complete":
+        stopWaiting();
         line(
           `adjudicate ${event.findings} finding(s) · ${(event.durationMs / 1000).toFixed(1)}s`,
         );
