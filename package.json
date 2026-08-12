@@ -28,7 +28,7 @@
     "cli"
   ],
   "bin": {
-    "secondpass": "./src/cli/index.ts"
+    "secondpass": "src/cli/index.ts"
   },
   "exports": {
     ".": "./src/index.ts",
